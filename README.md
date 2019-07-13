@@ -13,11 +13,9 @@ We seek to improve upon these models by removing some of the subjectivity and di
 
 ### Previous Work
 
+One of the current fire forecasting products in use in the US is the 7-Day Significant Fire Potential Product. Per the Geographic Area Coordination Centers <cite>[(GACC, n.d.)][5]</cite>:
 
-
-
-
-
+> The product is based on a statistical model which uses fuel moisture inputs from the NFDRS (WIMS) and various gridded weather inputs from weather models. This data is processed through a series of equations that yield forecasts of Fuel Dryness Level (DL) as well as probabilities (some objective and some subjective) of certain critical weather conditions for each of the next 7 days. When appropriate combinations of DL and weather triggers are expected, a “**High Risk Day**” is designated on the Chart to warn of a significantly higher than normal chance for a “Large Fire”.
 
 
 
@@ -25,19 +23,11 @@ We seek to improve upon these models by removing some of the subjectivity and di
 
 ### References
 
-[1]:https://www.nifc.gov/fireInfo/fireInfo_documents/SuppCosts.pdf	""National Interagency Fire Center (NIFC) (2019). Federal Firefighting Costs (Suppression Only)""
-
-
-
+[1]: https://www.nifc.gov/fireInfo/fireInfo_documents/SuppCosts.pdf	""National Interagency Fire Center (NIFC) (2019). Federal Firefighting Costs (Suppression Only)""
 [2]:https://www.nfpa.org/News-and-Research/Data-research-and-tools/US-Fire-Problem/Fire-loss-in-the-United-States	""National Fire Protection Association (NFPA) (September, 2018). Fire Loss in the United States During 2017.""
-
-
-
 [3]: https://www.nwcg.gov/sites/default/files/publications/pms426-3.pdf	""National Wildfire Coordinating Group (NWCG) (2019). NWCG Standards for Fire Weather Stations [pdf]""
-
-
-
 [4]: https://www.usfa.fema.gov/data/statistics/	""US Fire Administration (USFA) (n.d.). U.S. Fire Statistics""
+[5]: https://gacc.nifc.gov/oncc/predictive/weather/Fire%20Potential%20Documentation.htm	""Geographic Area Coordination Centers (GACC) (n.d.). Explanation of the 7-Day Significant Fire Potential Product.""
 
 
 
