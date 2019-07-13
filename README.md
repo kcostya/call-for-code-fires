@@ -25,19 +25,19 @@ We seek to improve upon these models by removing some of the subjectivity and di
 
 ### References
 
-[1]:https://www.nifc.gov/fireInfo/fireInfo_documents/SuppCosts.pdf	"National Interagency Fire Center (NIFC) (2019). Federal Firefighting Costs (Suppression Only)"
+[1]:https://www.nifc.gov/fireInfo/fireInfo_documents/SuppCosts.pdf	""National Interagency Fire Center (NIFC) (2019). Federal Firefighting Costs (Suppression Only)""
 
 
 
-[2]:https://www.nfpa.org/News-and-Research/Data-research-and-tools/US-Fire-Problem/Fire-loss-in-the-United-States	"National Fire Protection Association (NFPA) (September, 2018). Fire Loss in the United States During 2017."
+[2]:https://www.nfpa.org/News-and-Research/Data-research-and-tools/US-Fire-Problem/Fire-loss-in-the-United-States	""National Fire Protection Association (NFPA) (September, 2018). Fire Loss in the United States During 2017.""
 
 
 
-[3]: https://www.nwcg.gov/sites/default/files/publications/pms426-3.pdf	"National Wildfire Coordinating Group (NWCG) (2019). NWCG Standards for Fire Weather Stations [pdf]"
+[3]: https://www.nwcg.gov/sites/default/files/publications/pms426-3.pdf	""National Wildfire Coordinating Group (NWCG) (2019). NWCG Standards for Fire Weather Stations [pdf]""
 
 
 
-[4]: https://www.usfa.fema.gov/data/statistics/	"US Fire Administration (USFA) (n.d.). U.S. Fire Statistics"
+[4]: https://www.usfa.fema.gov/data/statistics/	""US Fire Administration (USFA) (n.d.). U.S. Fire Statistics""
 
 
 
