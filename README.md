@@ -72,11 +72,13 @@ We'd like to consult domain experts to further explore features which might impr
 
 Finally, with a different feature set (i.e. currents, tides), and at a higher spatial and temporal resolution, we believe this model could also be used to predict the spread of oil spills, as our model has shown to be effective at modeling fire spread. We would love to explore this in tandem, as the impact of oil spills on the environment has also been severe.
 
-### Thanks
+### Credits and Thanks
 
 First, we'd like to thank IBM for access to [ list IBM products/services used here ] and for the opportunity to compete in this challenge. It has been an inspiring and exciting experience for us. We would love to see our work applied to help mitigate damage and injury. 
 
 We'd also like to thank NASA and those involved in funding the collection of, and curating the datasets we have used. This would not be possible without you, so thank you! 
+
+### License
 
 
 
