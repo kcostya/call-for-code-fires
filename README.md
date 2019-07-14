@@ -70,8 +70,6 @@ Access to larger machines would also allow us to produce a longer-range forecast
 
 We'd like to consult domain experts to further explore features which might improve our scores, such as using forecasted weather. Currently we're using historical weather data, and weather at the time of prediction to make our forecast. However, as weather is one of the major factors in fire ignition and spread, we believe that using forecasted weather for each time-step in our prediction would result in more accurate predictions, particularly when combined with a higher temporal and spatial resolution.
 
-Finally, with a different feature set (i.e. currents, tides), and at a higher spatial and temporal resolution, we believe this model could also be used to predict the spread of oil spills, as our model has shown to be effective at modeling fire spread. We would love to explore this in tandem, as the impact of oil spills on the environment has also been severe.
-
 ### Credits and Thanks
 
 First, we'd like to thank IBM for access to [ list IBM products/services used here ] and for the opportunity to compete in this challenge. It has been an inspiring and exciting experience for us. We would love to see our work applied to help mitigate damage and injury. 
