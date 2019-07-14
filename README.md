@@ -18,11 +18,11 @@ One of the current fire forecasting products in use in the US is the 7-Day Signi
 
 We seek to improve upon these models by removing some of the subjectivity and direct human involvement through the use of deep learning algorithms and remotely sensed data. Our goal is to develop a model to forecast the number of fires in an area, given ambient weather conditions, as well as some constant features like elevation, population density, etc. 
 
-#### Data
+### Data
 
 For our training, validation and test data, we considered an area which includes the states of California and Nevada, as there have been numerous large wildfires in CA in recent years which have caused injury and significant property damage. However, our data comes from near-real-time global NASA datasets, and our solution could be applied globally with only the model needing to be trained on the regional data. 
 
-Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019). The temporal and spatial resolution varies between datasets, but we have aggregated and resampled the time series data to be on 12hour frequency and   
+Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019). The temporal and spatial resolution varies between datasets, but we have aggregated and resampled the time series data to be on 12hour frequency and each cell in our spatial grid is roughly 50km<sup>2</sup>.   
 
 ##### Data Sources
 
@@ -32,11 +32,11 @@ Our dataset consists of different NASA data collections, including active fire, 
 4. [Gridded Population of the World V.4](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11). _Population Density. Estimates of human population density (# of persons/square km) based on counts consistent with national consensuses and population registers_. 30 arc-second resolution (~1km)
 5. [MODIS Vegetation Indices](https://modis.gsfc.nasa.gov/data/dataprod/mod13.php) _MODIS vegetation indices, produced on 16-day intervals at 1km spatial resolution, provide consistent spatial and temporal comparisons of vegetation canopy greenness, a composite property of leaf area, chlorophyll and canopy structure._ In some cases, [vegetation indices have be used to estimate fuel moisture content](https://www.sciencedirect.com/science/article/abs/pii/S0034425704001531), one of the most important factors in fire ignition and spread.
 
-#### Architecture
+### Architecture
 
 [ details of final architecture here ]
 
-#### Metric
+### Metric
 
 For our metric, we used [F1 Score](https://en.wikipedia.org/wiki/F1_score), [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). For our baselines, we used scores from the following naive predictions:
 
