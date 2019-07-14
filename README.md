@@ -20,11 +20,17 @@ We seek to improve upon these models by removing some of the subjectivity and di
 
 ### Description
 
-For our training, validation and test set, we considered the state of California, as there have been numerous large wildfires in recent years which have caused injury and significant property damage. However, our data comes from near-real-time global NASA datasets, and our solution could be applied globally with only the model needing to be trained on the regional data. There is a possibility that transferring pretained model weights might be effective in reducing the training time when modeling a new region, though this hasn't been tested.
+For our training, validation and test data, we considered the state of California, as there have been numerous large wildfires in recent years which have caused injury and significant property damage. However, our data comes from near-real-time global NASA datasets, and our solution could be applied globally with only the model needing to be trained on the regional data. 
 
 #### Data
 
+Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019), covering the area of CA.
 
+1. [Fire Information Resource Management System (FIRMS)](https://doi.org/10.7927/H49C6VHW).  _Fire Information For Resource Management System (FIRMS) distributes Near Real-Time (NRT) active fire data within 3 hours of satellite observation from both the Moderate Resolution Imaging Spectroradiometer (MODIS) and the Visible Infrared Imaging Radiometer Suite (VIIRS)._ We used MODIS because VIIRS data only spans from 2012 to present.
+2. [Modern-Era Retrospective analysis for Research and Applications, Version 2 (MERRA 2)](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/) _(MERRA-2) provides data beginning in 1980 and enables assimilation of modern hyperspectral radiance and microwave observations, along with GPS-Radio Occultation datasets. It also uses NASA's ozone profile observations that began in late 2004. Spatial resolution is about 50 km in the latitudinal direction._
+3. [Land Cover CCI Climate Research Data Package](http://maps.elie.ucl.ac.be/CCI/viewer/download.php) _Global [land cover] maps at 300m spatial resolution._ Updated annually.
+4. [Gridded Population of the World V.4](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11). _Population Density. Estimates of human population density (# of persons/square km) based on counts consistent with national consensuses and population registers_. 30 arc-second resolution (~1km)
+5. [MODIS Vegetation Indices](https://modis.gsfc.nasa.gov/data/dataprod/mod13.php) _MODIS vegetation indices, produced on 16-day intervals at 1km spatial resolution, provide consistent spatial and temporal comparisons of vegetation canopy greenness, a composite property of leaf area, chlorophyll and canopy structure._ In some cases, [vegetation indices have be used to estimate fuel moisture content](https://www.sciencedirect.com/science/article/abs/pii/S0034425704001531), one of the most important factors in fire ignition and spread.
 
 #### Architecture
 
