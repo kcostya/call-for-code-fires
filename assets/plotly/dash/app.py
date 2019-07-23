@@ -22,39 +22,39 @@ mapbox_access_token = "pk.eyJ1IjoicnNheGJ5IiwiYSI6ImNqeWNxcHh4MDBsMDMzYmtvbWMyc2
 
 
 data = dict(
-            type=chart_type, 
+            type=chart_type,
             meta =  dict(columnNames = {
-                                      "lat": "lat", 
-                                      "lon": "lon", 
-                                      "fire count": "fire count", 
+                                      "lat": "lat",
+                                      "lon": "lon",
+                                      "fire count": "fire count",
                                         "timestamp": "timestamp"
                                     },
                          colorscale='jet',
                          colorbar=dict(thickness=20, ticklen=4),
 
-                        ), 
-            mode = "markers", 
-            name = '12', 
+                        ),
+            mode = "markers",
+            name = '12',
             lat = list(df_fp['lat']),
-            lon = list(df_fp['lon']), 
+            lon = list(df_fp['lon']),
             visible = True,
             marker = dict(
-                    cmax = 15, 
-                    cmin = 0, 
-                    opacity = 0.4, 
-                    sizeref = 0.03333333333333333, 
+                    cmax = 15,
+                    cmin = 0,
+                    opacity = 0.4,
+                    sizeref = 0.03333333333333333,
                     size = list(df_fp['fire count']),
                     color = list(df_fp['fire count']),
-                    sizemode = "area", 
-                    showscale = True, 
+                    sizemode = "area",
+                    showscale = True,
                     # symbol = 'square',
                 ),
             text = list(df_fp['fire count'].astype(str)),
-            ), 
+            ),
 layout = dict(
-              title = "CA Fires", 
-              width = 600, 
-              height = 600, 
+              title = "CA Fires",
+              width = 600,
+              height = 600,
               autosize = False,
               hovermode = 'closest',
               showlegend = False,
@@ -71,169 +71,169 @@ layout = dict(
                                           ),
 
             geo = {
-                      "scope": "world", 
+                      "scope": "world",
                       "center": {
-                                "lat": 37.44589155769352, 
+                                "lat": 37.44589155769352,
                                 "lon": -118.59118404059357
-                                  }, 
-                      'showocean': True, 
+                                  },
+                      'showocean': True,
                       'projection' : {
-                            "type": "mercator", 
-                            "scale": 27.846113156698145, 
+                            "type": "mercator",
+                            "scale": 27.846113156698145,
                             "rotation": {"lon": -118.59118404059357}
-                          }, 
-                      'resolution' : 110, 
+                          },
+                      'resolution' : 110,
                       'showcountries' : True
-                },  
+                },
             xaxis= {
-                  "range": [-1, 6], 
+                  "range": [-1, 6],
                   "autorange": True
-                }, 
+                },
             yaxis= {
-                  "range": [-1, 4], 
+                  "range": [-1, 4],
                   "autorange": True
-                }, 
-            legend = {"xanchor": "auto"}, 
-            dragmode = "pan", 
+                },
+            legend = {"xanchor": "auto"},
+            dragmode = "pan",
             template= {
                   "data": {
                     "bar": [
                               {
-                        "type": "bar", 
+                        "type": "bar",
                         "marker": {"colorbar": {
-                                                "ticks": "", 
+                                                "ticks": "",
                                                 "outlinewidth": 0
                                                   }
                                   }
                               }
-                            ], 
+                            ],
                     'table': [
                               {
-                                "type": "table", 
+                                "type": "table",
                                 "cells": {
-                                          "fill": {"color": "#EBF0F8"}, 
+                                          "fill": {"color": "#EBF0F8"},
                                           "line": {"color": "white"}
-                                        }, 
+                                        },
                                 "header": {
-                                          "fill": {"color": "#C8D4E3"}, 
+                                          "fill": {"color": "#C8D4E3"},
                                           "line": {"color": "white"}
                                         }
                                   }
-                            ], 
-                          }, 
+                            ],
+                          },
                   'layout':{
                         "geo": {
-                              "bgcolor": "white", 
-                              "showland": True, 
-                              "lakecolor": "white", 
-                              "landcolor": "white", 
-                              "showlakes": True, 
+                              "bgcolor": "white",
+                              "showland": True,
+                              "lakecolor": "white",
+                              "landcolor": "white",
+                              "showlakes": True,
                               "subunitcolor": "#C8D4E3"
-                            }, 
-                        "font": {"color": "#2a3f5f"}, 
+                            },
+                        "font": {"color": "#2a3f5f"},
                         "polar": {
-                                  "bgcolor": "white", 
+                                  "bgcolor": "white",
                                   "radialaxis": {
-                                                "ticks": "", 
-                                                "gridcolor": "#EBF0F8", 
+                                                "ticks": "",
+                                                "gridcolor": "#EBF0F8",
                                                 "linecolor": "#EBF0F8"
-                                              }, 
+                                              },
                                   "angularaxis": {
-                                            "ticks": "", 
-                                            "gridcolor": "#EBF0F8", 
+                                            "ticks": "",
+                                            "gridcolor": "#EBF0F8",
                                             "linecolor": "#EBF0F8"
                                               }
-                                    }, 
+                                    },
                     'scene': {
                               "xaxis": {
-                                "ticks": "", 
-                                "gridcolor": "#DFE8F3", 
-                                "gridwidth": 2, 
-                                "linecolor": "#EBF0F8", 
-                                "zerolinecolor": "#EBF0F8", 
-                                "showbackground": True, 
+                                "ticks": "",
+                                "gridcolor": "#DFE8F3",
+                                "gridwidth": 2,
+                                "linecolor": "#EBF0F8",
+                                "zerolinecolor": "#EBF0F8",
+                                "showbackground": True,
                                 "backgroundcolor": "white"
-                              }, 
+                              },
                           "yaxis": {
-                                "ticks": "", 
-                                "gridcolor": "#DFE8F3", 
-                                "gridwidth": 2, 
-                                "linecolor": "#EBF0F8", 
-                                "zerolinecolor": "#EBF0F8", 
-                                "showbackground": True, 
+                                "ticks": "",
+                                "gridcolor": "#DFE8F3",
+                                "gridwidth": 2,
+                                "linecolor": "#EBF0F8",
+                                "zerolinecolor": "#EBF0F8",
+                                "showbackground": True,
                                 "backgroundcolor": "white"
-                              }, 
+                              },
                           "zaxis": {
-                                "ticks": "", 
-                                "gridcolor": "#DFE8F3", 
-                                "gridwidth": 2, 
-                                "linecolor": "#EBF0F8", 
-                                "zerolinecolor": "#EBF0F8", 
-                                "showbackground": True, 
+                                "ticks": "",
+                                "gridcolor": "#DFE8F3",
+                                "gridwidth": 2,
+                                "linecolor": "#EBF0F8",
+                                "zerolinecolor": "#EBF0F8",
+                                "showbackground": True,
                                 "backgroundcolor": "white"
                               }
-                        }, 
+                        },
                     'xaxis' : {
-                          "ticks": "", 
-                          "gridcolor": "#EBF0F8", 
-                          "linecolor": "#EBF0F8", 
-                          "automargin": True, 
-                          "zerolinecolor": "#EBF0F8", 
+                          "ticks": "",
+                          "gridcolor": "#EBF0F8",
+                          "linecolor": "#EBF0F8",
+                          "automargin": True,
+                          "zerolinecolor": "#EBF0F8",
                           "zerolinewidth": 2
-                        }, 
+                        },
                     'yaxis': {
-                          "ticks": "", 
-                          "gridcolor": "#EBF0F8", 
-                          "linecolor": "#EBF0F8", 
-                          "automargin": True, 
-                          "zerolinecolor": "#EBF0F8", 
+                          "ticks": "",
+                          "gridcolor": "#EBF0F8",
+                          "linecolor": "#EBF0F8",
+                          "automargin": True,
+                          "zerolinecolor": "#EBF0F8",
                           "zerolinewidth": 2
-                        }, 
+                        },
                     'ternary':{
                           "aaxis": {
-                                    "ticks": "", 
-                                    "gridcolor": "#DFE8F3", 
+                                    "ticks": "",
+                                    "gridcolor": "#DFE8F3",
                                     "linecolor": "#A2B1C6"
-                                  }, 
+                                  },
                           "baxis": {
-                                    "ticks": "", 
-                                    "gridcolor": "#DFE8F3", 
+                                    "ticks": "",
+                                    "gridcolor": "#DFE8F3",
                                     "linecolor": "#A2B1C6"
-                              }, 
+                              },
                           "caxis": {
-                                    "ticks": "", 
-                                    "gridcolor": "#DFE8F3", 
+                                    "ticks": "",
+                                    "gridcolor": "#DFE8F3",
                                     "linecolor": "#A2B1C6"
-                              }, 
+                              },
                           "bgcolor": "white"
-                        }, 
-                'colorway' : ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#19d3f3", "#e763fa", "#fecb52", "#ffa15a", "#ff6692", "#b6e880"], 
-                'hovermode' : "closest", 
+                        },
+                'colorway' : ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#19d3f3", "#e763fa", "#fecb52", "#ffa15a", "#ff6692", "#b6e880"],
+                'hovermode' : "closest",
                 'colorscale' : {
-                              "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], 
+                              "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]],
                               "sequential": [[0, "#0508b8"], [0.0893854748603352, "#1910d8"], [0.1787709497206704, "#3c19f0"], [0.2681564245810056, "#6b1cfb"], [0.3575418994413408, "#981cfd"], [0.44692737430167595, "#bf1cfd"], [0.5363128491620112, "#dd2bfd"], [0.6256983240223464, "#f246fe"], [0.7150837988826816, "#fc67fd"], [0.8044692737430168, "#fe88fc"], [0.8938547486033519, "#fea5fd"], [0.9832402234636871, "#febefe"], [1, "#fec3fe"]] ,
                               "sequentialminus": [[0, "#0508b8"], [0.0893854748603352, "#1910d8"], [0.1787709497206704, "#3c19f0"], [0.2681564245810056, "#6b1cfb"], [0.3575418994413408, "#981cfd"], [0.44692737430167595, "#bf1cfd"], [0.5363128491620112, "#dd2bfd"], [0.6256983240223464, "#f246fe"], [0.7150837988826816, "#fc67fd"], [0.8044692737430168, "#fe88fc"], [0.8938547486033519, "#fea5fd"], [0.9832402234636871, "#febefe"], [1, "#fec3fe"]]
-                            }, 
-                'plot_bgcolor' :  "white", 
-                'paper_bgcolor' : "white", 
+                            },
+                'plot_bgcolor' :  "white",
+                'paper_bgcolor' : "white",
                 'shapedefaults' : {
-                  "line": {"width": 0}, 
-                  "opacity": 0.4, 
+                  "line": {"width": 0},
+                  "opacity": 0.4,
                   "fillcolor": "#506784"
-                }, 
+                },
                 'annotationdefaults' : {
-                  "arrowhead": 0, 
-                  "arrowcolor": "#506784", 
+                  "arrowhead": 0,
+                  "arrowcolor": "#506784",
                   "arrowwidth": 1
                 }
-              }, 
-            }, 
-          )   
+              },
+            },
+          )
 data = go.Data(data)
 fig = go.Figure(data=data,layout=layout)
 # fig['data'][0]['marker']['symbol'] = 'square'
 
-### Table Fig 
+### Table Fig
 
 fig2 =  go.Figure(data=[go.Table(
                               header=dict(values= ['timestep', "lat", "lon", "fire count"],
@@ -350,13 +350,13 @@ def update_fig(fire_count,timestep_value, forecast_type):
     fig['data'][0]['lat']  = list(df['lat']) if len(df['lat']) > 0 else [0]
     fig['data'][0]['lon'] = list(df['lon'])if len(df['lon']) > 0 else [0]
     fig['data'][0]['marker'] = dict(
-                          cmax = 25, 
-                          cmin = 0, 
-                          opacity = 0.4, 
-                          sizeref = 0.03333333333333333, 
+                          cmax = 25,
+                          cmin = 0,
+                          opacity = 0.4,
+                          sizeref = 0.03333333333333333,
                           size = list(df['fire count']),
                           color = list(df['fire count']),
-                          sizemode = "area", 
+                          sizemode = "area",
                           showscale = True, )
     fig['data'][0]['text'] = list(df['fire count'].astype(str))
 
@@ -371,7 +371,5 @@ if __name__ == '__main__':
   # local
   # app.run_server(debug=True, port=8000) #%tb
   # public
-  app.run_server(debug=True)
-
-
-
+  #app.run_server(debug=True)
+  app.run_server(host='0.0.0.0', debug=True, port=8080)
