@@ -7,18 +7,59 @@ import pandas as pd
 from flask import Flask
 import numpy as np
 import dash_table
+import urllib
+import glob
 
 
+## Whether or not to use nrt data
+use_nrt = False
 
+if use_nrt:
+  ## Read in NRT data ##
+  all_files = glob.glob('nrt/*.csv')
+  dfs = []
+
+  for csv in all_files:
+      df = pd.read_csv(csv, index_col=None, header=0)
+      dfs.append(df)
+
+  df_h = pd.concat(dfs, axis=0, ignore_index=True)
+
+else:
+  df_h = pd.read_csv('historical_df_start_2016-04-20_12_00_00.csv')
+
+## The fire driven and weather driven predictions
 df_fp = pd.read_csv('sample_df_start_2016-04-21_12_00_00.csv')
-df_h = pd.read_csv('historical_df_start_2016-04-20_12_00_00.csv')
 df_wp = pd.read_csv('sample_start_2016-04-21_12h_step_12h_pred_noinputfire_bestseparator_min079.csv')
 
 
-### Define Starting Fig ####
+## parameters for display
+colorbar_max_val = 8
+opacity = 1
+marker_size = 12
+colorscale = 'Viridis'#[[0, "rgb(166,206,227)"],
+              # [0.25, "rgb(31,120,180)"],
+              # [0.45, "rgb(178,223,138)"],
+              # [0.65, "rgb(51,160,44)"],
+              # [0.85, "rgb(251,154,153)"],
+              # [1, "rgb(227,26,28)"]]
+max_table_rows = 10
+
+#### Define Starting Fig ####
 
 chart_type = "scattermapbox"
 mapbox_access_token = "pk.eyJ1IjoicnNheGJ5IiwiYSI6ImNqeWNxcHh4MDBsMDMzYmtvbWMyc2VzODQifQ.35O16QEQ1KwDovug6aBQ7Q"
+
+def generate_table(dataframe, max_rows=max_table_rows):
+    return html.Table(
+        # Header
+        [html.Tr([html.Th(col) for col in dataframe.columns])] +
+
+        # Body
+        [html.Tr([
+            html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
+        ]) for i in range(min(len(dataframe), max_rows))]
+    )
 
 
 data = dict(
@@ -29,8 +70,8 @@ data = dict(
                                       "fire count": "fire count",
                                         "timestamp": "timestamp"
                                     },
-                         colorscale='jet',
-                         colorbar=dict(thickness=20, ticklen=4),
+                         # colorscale='jet',
+                         colorbar=dict(thickness=20, ticklen=4,),
 
                         ),
             mode = "markers",
@@ -39,11 +80,13 @@ data = dict(
             lon = list(df_fp['lon']),
             visible = True,
             marker = dict(
-                    cmax = 15,
-                    cmin = 0,
-                    opacity = 0.4,
-                    sizeref = 0.03333333333333333,
-                    size = list(df_fp['fire count']),
+                    cmax = colorbar_max_val, 
+                    cmin = 0, 
+                    opacity = opacity,
+                    colorscale= colorscale, 
+                    sizeref = 0.03333333333333333, 
+                    size = marker_size,
+
                     color = list(df_fp['fire count']),
                     sizemode = "area",
                     showscale = True,
@@ -52,9 +95,10 @@ data = dict(
             text = list(df_fp['fire count'].astype(str)),
             ),
 layout = dict(
-              title = "CA Fires",
-              width = 600,
-              height = 600,
+              title = "CA Fires: Fire-driven Forecast", 
+              width = 600, 
+              height = 600, 
+
               autosize = False,
               hovermode = 'closest',
               showlegend = False,
@@ -236,11 +280,11 @@ fig = go.Figure(data=data,layout=layout)
 ### Table Fig
 
 fig2 =  go.Figure(data=[go.Table(
-                              header=dict(values= ['timestep', "lat", "lon", "fire count"],
+                              header=dict(values= ['timestamp','timestep', "lat", "lon", "fire count"],
                                           fill_color='darkkhaki',
                                           align='left',
                                            ),
-                              cells=dict(values=[df_fp.timestep, df_fp.lat, df_fp.lon, df_fp['fire count']],
+                              cells=dict(values=[df_fp.timestamp, df_fp.timestep, df_fp.lat, df_fp.lon, df_fp['fire count']],
                                          fill_color='antiquewhite',
                                          align='left'))
                   ])
@@ -249,7 +293,7 @@ fig2 =  go.Figure(data=[go.Table(
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, )
 
 server = app.server
 
@@ -260,19 +304,12 @@ app.layout = html.Div([
 
 #### Div 1 for dropdown menu
         html.Div([
-            dcc.Dropdown(
-                id='fire-count-display',
-                options=[{'label': i, 'value': i} for i in filter_options],
-                value=filter_options,
-                multi=True,
-                # placeholder="Select fire count range",
-
-                ),
             dcc.RadioItems(
                 id='forecast-type',
                 options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Weather-driven forecast', 'Previous day - actual']],
                 value='Fire-driven forecast',
-                labelStyle={'display': 'inline-block'}
+                labelStyle={'display': 'inline-block',},
+                inputStyle= {'margin-right':'8px' ,'margin-top':'10px','margin-left': '18px'}
             )
              ],
         style={'width': '48%','display': 'inline-block',}),
@@ -292,40 +329,115 @@ app.layout = html.Div([
                 marks={str(timestep): str(timestep) for timestep in df_fp['timestep'].unique()},
                 step=None,
                   ),
-            ## table
-             # dcc.Graph(id='table'),
-
-            ], style={'width': '50%', 'position':'fixed', 'left':'70%', 'top':'50%', 'margin-top':-300, 'margin-left':-300}),
+            ], style={'width': '50%', 'position':'fixed', 'left':'70%', 'top':'45%', 'margin-top':-300, 'margin-left':-300}),
 
   html.Div([
-      dcc.Graph(id='datatable'),
-      # dash_table.DataTable(
-      #     id='datatable',
-      #     columns=[
-      #         {"name": i, "id": i, "deletable": True} for i in df.columns if i not in ['fire count category', 'timestep']
-      #     ],
-      #     data=df.to_dict('records'),
-      #     fill_width=False,
-      #     page_size=12,
-      #     sort_action='native',
-      # ),
-  ], style={'width': '50%', 'position':'fixed', 'left':'25%', 'top':'25%', 'margin-bottom':-300, 'margin-left':-300})
+          dash_table.DataTable(
+                              id='table-filtering-be',
+                              columns=[
+                                  {"name": i, "id": i} for i in df_fp.columns 
+                              ],
+                              filter_action='custom',
+                              filter_query='',
+                              style_as_list_view=True,
+                              style_cell_conditional=[
+                                                        {
+                                                            'if': {'column_id': 'timestamp'},'width': '8%',
+                                                            
+                                                        },                              
+                                                        {
+                                                            'if': {'column_id': 'fire count'},'width': '12%',
+                                                            
+                                                        }, 
+       
+                                                         {
+                                                            'if': {'column_id': 'timestep'},'width': '10%', 
+                                                            
+                                                        }, 
+                                                         {
+                                                            'if': {'column_id': 'lat'},'width': '5%',
+                                                            
+                                                        },
+                                                         {
+                                                            'if': {'column_id': 'lon'},'width': '5%',
+                                                        },
+                                                      ],
+                              style_data_conditional=[
+                                                      {
+                                                      'if': {'row_index': 'odd'},
+                                                      'backgroundColor': 'rgb(248, 248, 248)'
+                                                      }
+                                                      ],
+                              style_header={
+                                          'backgroundColor': 'rgb(230, 230, 230)',
+                                          'fontWeight': 'bold',
+                                              },
+            
+                              style_table={
+                                          'maxHeight': '450px',
+                                          'maxWidth': '500px',
+                                          'overflowY': 'scroll',
+                                          },
+                              fixed_rows={ 'headers': True, 'data': 0 },
 
-
+                          ),
+                  html.A(
+                          'Download Data',
+                          id='download-link',
+                          download="rawdata.csv",
+                          href="",
+                          target="_blank"
+                      )
+  ], style={'width': '50%', 'position':'fixed', 'left':'30%', 'top':'17%', 'margin-bottom':-300, 'margin-left':-325})
 
 ])
+
+operators = [['ge ', '>='],
+             ['le ', '<='],
+             ['lt ', '<'],
+             ['gt ', '>'],
+             ['ne ', '!='],
+             ['eq ', '='],
+             ['contains '],
+             ['datestartswith ']]
+
+def split_filter_part(filter_part):
+    for operator_type in operators:
+        for operator in operator_type:
+            if operator in filter_part:
+                name_part, value_part = filter_part.split(operator, 1)
+                name = name_part[name_part.find('{') + 1: name_part.rfind('}')]
+
+                value_part = value_part.strip()
+                v0 = value_part[0]
+                if (v0 == value_part[-1] and v0 in ("'", '"', '`')):
+                    value = value_part[1: -1].replace('\\' + v0, v0)
+                else:
+                    try:
+                        value = float(value_part)
+                    except ValueError:
+                        value = value_part
+
+                # word operators need spaces after them in the filter string,
+                # but we don't want these later
+                return name, operator_type[0].strip(), value
+
+    return [None] * 3
+
 
 ## Call backs
 @app.callback(
     # we want to filter by fire count only
     [Output('firecount-graphic', 'figure'),
-    Output('datatable', 'figure')],
-    [Input('fire-count-display', 'value'),
+    dash.dependencies.Output('table-filtering-be', "data"),
+    dash.dependencies.Output('download-link', 'href')],
+    [
      Input('timestep--slider', 'value'),
-     Input('forecast-type', 'value'),]) #
+     Input('forecast-type', 'value'),
+     dash.dependencies.Input('table-filtering-be', "filter_query")]) #
 
 ## Update the figure itself
-def update_fig(fire_count,timestep_value, forecast_type):
+def update_fig(timestep_value, forecast_type, filter_query):
   dff = df_fp
 
   if forecast_type == 'Weather-driven forecast':
@@ -333,43 +445,64 @@ def update_fig(fire_count,timestep_value, forecast_type):
   elif forecast_type == 'Previous day - actual':
     dff = df_h
 
-  if isinstance(fire_count, str):
-    dff = dff[(dff['timestep'] == timestep_value) & (dff['fire count category'] == fire_count)]
-  else:
-    dff = dff[(dff['timestep'] == timestep_value) & (dff['fire count category'].isin(fire_count))]
+  dff = dff[(dff['timestep'] == timestep_value)]
+  fig.layout.title = "CA Fire: {}".format(forecast_type)
+
+
+  def update_table(df, filter):
+      filtering_expressions = filter.split(' && ')
+      for filter_part in filtering_expressions:
+          col_name, operator, filter_value = split_filter_part(filter_part)
+
+          if operator in ('eq', 'ne', 'lt', 'le', 'gt', 'ge'):
+              # these operators match pandas series operator method names
+              df = df.loc[getattr(df[col_name], operator)(filter_value)]
+          elif operator == 'contains':
+              df = df.loc[dff[col_name].str.contains(filter_value)]
+          elif operator == 'datestartswith':
+              # this is a simplification of the front-end filtering logic,
+              # only works with complete fields in standard format
+              df = df.loc[df[col_name].str.startswith(filter_value)]
+      return df
+
+
+  dff = update_table(dff, filter_query)
+
+  csv_string = dff.to_csv(index=False, encoding='utf-8')
+  csv_string = "data:text/csv;charset=utf-8," + urllib.quote(csv_string)
 
   ## Update the data within the figure
-  def update_data(df, fig1, fig2):
+  def update_data(df, fig):
 
     # for table
     df.sort_values(by='fire count', inplace=True, ascending=False)
-    fig2['data'][0]['cells']['values'] = [df.timestep, df.lat, df.lon, df['fire count']]
 
     # access the first (and only trace) of the data, then reassign the properties
     fig['data'][0]['name'] = timestep_value
     fig['data'][0]['lat']  = list(df['lat']) if len(df['lat']) > 0 else [0]
     fig['data'][0]['lon'] = list(df['lon'])if len(df['lon']) > 0 else [0]
     fig['data'][0]['marker'] = dict(
-                          cmax = 25,
-                          cmin = 0,
-                          opacity = 0.4,
+                          cmax = colorbar_max_val, 
+                          cmin = 0, 
+                          opacity = opacity, 
                           sizeref = 0.03333333333333333,
-                          size = list(df['fire count']),
+                          colorscale = colorscale, 
+                          size = marker_size, #list(df['fire count']),
+
                           color = list(df['fire count']),
                           sizemode = "area",
                           showscale = True, )
     fig['data'][0]['text'] = list(df['fire count'].astype(str))
+    return fig
 
-    return fig1, fig2
-
-  return update_data(dff, fig, fig2)
+  return update_data(dff, fig), dff.to_dict('records'), csv_string
 
 
 
 
 if __name__ == '__main__':
-  # local
-  # app.run_server(debug=True, port=8000) #%tb
-  # public
-  #app.run_server(debug=True)
+  # local 
+  # app.run_server(debug=True)
+  #public
   app.run_server(host='0.0.0.0', debug=True, port=8080)
+
