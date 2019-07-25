@@ -128,11 +128,6 @@ data_pivot_rs.drop(['variable'], axis=1, inplace=True)
 # # # # we want only a sample with fire count greater than 0 for the dashboard
 sample = data_pivot_rs[data_pivot_rs['fire count'] > 0.]
 
-# # # # create categories for the dash display
-bins = [0,1,5,10,100]
-labels = ['(-0.001, 1.0]', '(1.0, 5.0]', '(5.0, 10.0]', '(10.0, 100.0]']
-binned = pd.cut(sample['fire count'], bins=bins,include_lowest=True, labels=labels)
-sample['fire count category'] = binned
 
 # # create timestep feature
 sample.sort_values('timestamp', inplace=True)

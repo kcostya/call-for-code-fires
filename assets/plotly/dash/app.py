@@ -8,20 +8,49 @@ from flask import Flask
 import numpy as np
 import dash_table
 import urllib
+import glob
 
 
+## Whether or not to use nrt data
+use_nrt = False
 
+if use_nrt:
+  ## Read in NRT data ##
+  all_files = glob.glob('nrt/*.csv')
+  dfs = []
+
+  for csv in all_files:
+      df = pd.read_csv(csv, index_col=None, header=0)
+      dfs.append(df)
+
+  df_h = pd.concat(dfs, axis=0, ignore_index=True)
+
+else:
+  df_h = pd.read_csv('historical_df_start_2016-04-20_12_00_00.csv')
+
+## The fire driven and weather driven predictions
 df_fp = pd.read_csv('sample_df_start_2016-04-21_12_00_00.csv')
-df_h = pd.read_csv('historical_df_start_2016-04-20_12_00_00.csv')
 df_wp = pd.read_csv('sample_start_2016-04-21_12h_step_12h_pred_noinputfire_bestseparator_min079.csv')
 
+
+## parameters for display
+colorbar_max_val = 8
+opacity = 1
+marker_size = 12
+colorscale = 'Viridis'#[[0, "rgb(166,206,227)"],
+              # [0.25, "rgb(31,120,180)"],
+              # [0.45, "rgb(178,223,138)"],
+              # [0.65, "rgb(51,160,44)"],
+              # [0.85, "rgb(251,154,153)"],
+              # [1, "rgb(227,26,28)"]]
+max_table_rows = 10
 
 #### Define Starting Fig ####
 
 chart_type = "scattermapbox"
 mapbox_access_token = "pk.eyJ1IjoicnNheGJ5IiwiYSI6ImNqeWNxcHh4MDBsMDMzYmtvbWMyc2VzODQifQ.35O16QEQ1KwDovug6aBQ7Q"
 
-def generate_table(dataframe, max_rows=10):
+def generate_table(dataframe, max_rows=max_table_rows):
     return html.Table(
         # Header
         [html.Tr([html.Th(col) for col in dataframe.columns])] +
@@ -42,7 +71,7 @@ data = dict(
                                         "timestamp": "timestamp"
                                     },
                          # colorscale='jet',
-                         colorbar=dict(thickness=20, ticklen=4),
+                         colorbar=dict(thickness=20, ticklen=4,),
 
                         ), 
             mode = "markers", 
@@ -51,11 +80,12 @@ data = dict(
             lon = list(df_fp['lon']), 
             visible = True,
             marker = dict(
-                    cmax = 15, 
+                    cmax = colorbar_max_val, 
                     cmin = 0, 
-                    opacity = 0.4, 
+                    opacity = opacity,
+                    colorscale= colorscale, 
                     sizeref = 0.03333333333333333, 
-                    size = list(df_fp['fire count']),
+                    size = marker_size,
                     color = list(df_fp['fire count']),
                     sizemode = "area", 
                     showscale = True, 
@@ -248,11 +278,11 @@ fig = go.Figure(data=data,layout=layout)
 ### Table Fig 
 
 fig2 =  go.Figure(data=[go.Table(
-                              header=dict(values= ['timestep', "lat", "lon", "fire count"],
+                              header=dict(values= ['timestamp','timestep', "lat", "lon", "fire count"],
                                           fill_color='darkkhaki',
                                           align='left',
                                            ),
-                              cells=dict(values=[df_fp.timestep, df_fp.lat, df_fp.lon, df_fp['fire count']],
+                              cells=dict(values=[df_fp.timestamp, df_fp.timestep, df_fp.lat, df_fp.lon, df_fp['fire count']],
                                          fill_color='antiquewhite',
                                          align='left'))
                   ])
@@ -303,20 +333,21 @@ app.layout = html.Div([
           dash_table.DataTable(
                               id='table-filtering-be',
                               columns=[
-                                  {"name": i, "id": i} for i in df_fp.columns if i != 'timestamp'
+                                  {"name": i, "id": i} for i in df_fp.columns 
                               ],
                               filter_action='custom',
                               filter_query='',
                               style_as_list_view=True,
                               style_cell_conditional=[
                                                         {
+                                                            'if': {'column_id': 'timestamp'},'width': '8%',
+                                                            
+                                                        },                              
+                                                        {
                                                             'if': {'column_id': 'fire count'},'width': '12%',
                                                             
                                                         }, 
-                                                         {
-                                                            'if': {'column_id': 'fire count category'},'width': '20%', 'padding-right':'10px'
-                                                            
-                                                        }, 
+       
                                                          {
                                                             'if': {'column_id': 'timestep'},'width': '10%', 
                                                             
@@ -449,11 +480,12 @@ def update_fig(timestep_value, forecast_type, filter_query):
     fig['data'][0]['lat']  = list(df['lat']) if len(df['lat']) > 0 else [0]
     fig['data'][0]['lon'] = list(df['lon'])if len(df['lon']) > 0 else [0]
     fig['data'][0]['marker'] = dict(
-                          cmax = 25, 
+                          cmax = colorbar_max_val, 
                           cmin = 0, 
-                          opacity = 0.4, 
-                          sizeref = 0.03333333333333333, 
-                          size = list(df['fire count']),
+                          opacity = opacity, 
+                          sizeref = 0.03333333333333333,
+                          colorscale = colorscale, 
+                          size = marker_size, #list(df['fire count']),
                           color = list(df['fire count']),
                           sizemode = "area", 
                           showscale = True, )
@@ -466,10 +498,11 @@ def update_fig(timestep_value, forecast_type, filter_query):
 
 
 if __name__ == '__main__':
-  # local
-  # app.run_server(debug=True, port=8000)
-  # public
+  # local 
   app.run_server(debug=True)
+  #public
+  # app.run_server(host='0.0.0.0', debug=True, port=8080)
+
 
 
 
