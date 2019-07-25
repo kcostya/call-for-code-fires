@@ -6,7 +6,7 @@ import seaborn as sns
 
 def process_distinct_satellites(df):
     df.sort_values('timestamp', inplace=True)
-    df = df.pivot_table(values='fire_count', index='timestamp', columns=['lat_grid', 'lon_grid'])
+    df = df.pivot_table(values='fire count', index='timestamp', columns=['lat_grid', 'lon_grid'])
     # fill NaN with zero
     df.fillna(0, inplace=True)
     df = reset_index(df)

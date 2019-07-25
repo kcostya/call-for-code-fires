@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 
 curr_dt = datetime.datetime.now()
+curr_dt = curr_dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
 ##### Get CSV from email
 
@@ -78,10 +79,10 @@ urcrnrlat=42.
 # # convert coordinates to grid
 gridparams = SubGridBuilder((llcrnrlon, urcrnrlon, llcrnrlat, urcrnrlat), (0.625, 0.5), 3)
 
-df = to_grid(df, gridparams.default_lat_border, gridparams.default_lon_border)
+data = to_grid(df, gridparams.default_lat_border, gridparams.default_lon_border)
 
 # sum fires on grid for every timestep
-data['fire_count'] = data.groupby(['lat_grid', 'lon_grid', 'timestamp'])['will_use'].transform('sum')
+data['fire count'] = data.groupby(['lat_grid', 'lon_grid', 'timestamp'])['will_use'].transform('sum')
 data.drop(['latitude', 'longitude', 'will_use'], axis=1, inplace=True)
 data.drop_duplicates(inplace=True)
 
@@ -112,35 +113,39 @@ elif (len(s2_data) > 0):
 
 data_pivot.sort_values('timestamp', inplace=True)
 
-# if there are observations of the two satellites in the same 12 hour period we get the last
-data_pivot_rs = data_pivot.resample('12H').last()
+# # if there are observations of the two satellites in the same 12 hour period we get the last
+data_pivot_rs = data_pivot #.resample('12H').last()
 
+# reset index
+data_pivot_rs = reset_index(data_pivot_rs)
 
-# # # we want only a sample with fire count greater than 0 for the dashboard
+# unpivot dataframe
+data_pivot_rs = data_pivot_rs.melt(id_vars=['timestamp'], value_name='fire count')
+
+data_pivot_rs['lat'], data_pivot_rs['lon'] = zip(*data_pivot_rs['variable'])
+data_pivot_rs.drop(['variable'], axis=1, inplace=True)
+
+# # # # we want only a sample with fire count greater than 0 for the dashboard
 sample = data_pivot_rs[data_pivot_rs['fire count'] > 0.]
 
-# # # create categories for the dash display
+# # # # create categories for the dash display
 bins = [0,1,5,10,100]
 labels = ['(-0.001, 1.0]', '(1.0, 5.0]', '(5.0, 10.0]', '(10.0, 100.0]']
 binned = pd.cut(sample['fire count'], bins=bins,include_lowest=True, labels=labels)
 sample['fire count category'] = binned
 
-# create timestep feature
+# # create timestep feature
 sample.sort_values('timestamp', inplace=True)
 sample.reset_index(inplace=True, drop=True)
 timesteps = pd.to_datetime(sample['timestamp'])
 start_day = curr_dt#sample['timestamp'].dt.day[0] # get the first day
 start_time = 0.#sample['timestamp'].dt.hour[0] # get the first hour
  
-time = pd.DatetimeIndex(start=curr_dt, freq='12h', periods=4)
-print(time)
-# td = (sample['timestamp'].dt.hour-sample['timestamp'].dt.hour.shift()).fillna(0)
-# print(td)
+time = pd.date_range(start=curr_dt, freq='12h', periods=5)
 
 
-# timestep = 12
-# second_time = 0 if start_time == 12 else 12
-# timestep_conversion = {start_day:{start_time:timestep, second_time: timestep*3}, start_day+1:{second_time: timestep*2, start_time:timestep*4}}
-# sample['timestep'] = sample['timestamp'].apply(lambda x: timestep_conversion[x.day][x.hour])
 
-# sample.to_csv('nrt/{}_processed.csv'.format(curr_dt), index=False)
+timesteps = pd.cut(df['timestamp'], time, labels=[12, 24, 36, 48], include_lowest=True, right=False)
+sample['timestep'] = timesteps
+
+sample.to_csv('nrt/{}_processed.csv'.format(datetime.datetime.now()), index=False)
