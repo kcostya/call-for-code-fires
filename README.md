@@ -48,7 +48,7 @@ The second main approach doesn’t forecast the existing fires but shows the are
 
 <figure align="center">
   <img src="/images/simpla_data_flow.JPG">
-  <figcaption>Simplified dataflow of our models in Approach I.</figcaption>
+  <figcaption font-style="italic">Simplified dataflow of our models in Approach I.</figcaption>
 </figure>
 
 During experimenting, we tried out different architectures of mixed convolutional LSTM, encoder-decoder and convolutional layers. So far the best results for Approach I. we got from the below simple 2 steps convolutional LSTM and one step convolutional network.
