@@ -47,7 +47,7 @@ Approach II:
 The second main approach doesn’t forecast the existing fires but shows the area with the largest potential for new fires. (fig: fire potential map based on the weather prior). This model isn’t a simple statistical model of the training period, but it also considers the 30 days weather prior to the estimated day. This can be used with historical weather data, numerical forecast, or combined. This model gives back a map, where we can see the relative potential of fires. Later we plan to use the outputs of this model as an input feature of the above-described models.
 
 <figure align="center">
-  <img src="/images/simple_data_flow.JPG">
+  <img src="/images/simpla_data_flow.JPG">
   <figcaption>Simplified dataflow of our models in Approach I.</figcaption>
 </figure>
 
