@@ -85,7 +85,7 @@ For predicting fire we collected and processed a large amount of data from diffe
 Or main data types are satellite observation of fires, weather reanalysis, land cover, and geographical features, and satellite observations about the features of the vegetation like leaf area index or MIR (middle infrared region). We transformed this dataset to the same spatial grid, and time steps. For building the first models we used the default resolution of the MERRA (Modern-Era Retrospective analysis for Research and Applications) database, which was produced on a 0.5° × 0.66° grid. Our dataset covers nine years of data from 2010 to 2018. 
 
 <figure align="center">
-  <img src="/images/data_examples.JPG" width="400" height="300">
+  <img src="/images/data_examples.JPG">
   <figcaption>Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire</figcaption>
 </figure>
 
