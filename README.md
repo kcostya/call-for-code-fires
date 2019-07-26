@@ -3,7 +3,10 @@
 ### Problem Description
 
 In the US, over the past decade, there have been an average of 66 thousand fires annually, with Federal fire suppression costs totaling over \$18 billion for the decade <cite>[(NIFC, 2019)][1]</cite>. Over 69 million acres have been burned, sometimes resulting in property damage, injury, and even death. According to the National Fire Protection Association’s Fire Loss report for the US in 2017 alone, property damage was estimated at \$23 billion, including \$10 billion in losses from wildfires in Northern California <cite>[(NFPA, 2018)][2]</cite>.<br>
-  <img src="https://github.com/kcostya/call-for-code-fires/blob/master/images/all_fires.JPG" align="center" width="400" height="400">
+<figure align="center">
+  <img src="https://github.com/kcostya/call-for-code-fires/blob/master/images/all_fires.JPG" width="500" height="500">
+</figure>
+  <img src="https://github.com/kcostya/call-for-code-fires/blob/master/images/all_fires.JPG" align="center" width="500" height="500">
 
 ### Forecasting Fires - Why is it important?
 
