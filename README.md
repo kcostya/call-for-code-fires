@@ -32,7 +32,7 @@ The grid cell dimension we used for the demo is approximately 50 km, and we didn
 Main approaches:
 
 <figure align="center">
-  <img src="/images/approaches.JPG" align="center" width="500" height="500">
+  <img src="/images/approaches.JPG">
 </figure>
 
 Approach I:
@@ -46,7 +46,7 @@ Approach II:
 The second main approach doesn’t forecast the existing fires but shows the area with the largest potential for new fires. (fig: fire potential map based on the weather prior). This model isn’t a simple statistical model of the training period, but it also considers the 30 days weather prior to the estimated day. This can be used with historical weather data, numerical forecast, or combined. This model gives back a map, where we can see the relative potential of fires. Later we plan to use the outputs of this model as an input feature of the above-described models.
 
 <figure align="center">
-  <img src="/images/all_fires.JPG">
+  <img src="/images/simple_data_flow.JPG">
   <figcaption>Simplified dataflow of our models in Approach I.</figcaption>
 </figure>
 
@@ -61,7 +61,7 @@ Our outputs are continuous numbers, but to decide the best model for the demo we
 Fires are rare compared to areas without fires. This lead to a dataset, where most of the fire counts are zeros, and only 2-3 percent of the fire data is non zero. And the large proportion of the fiery cells contains only 1-2 fires, which is close to zero. To help the model to learn the difference between fiery and non-fiery cells, we tried to separate the fire and non-fire cases by replacing the non-fiery zero values by negative numbers. -1 for non-fiery cells gave better results than zero, but to find better separation needs further research.
 
 <figure align="center">
-  <img src="/images/scores.JPG">
+  <img src="/images/scores.JPG" width="250" height="250">
   <figcaption>Precision, recall, f1-score with different fire existence separation thresholds.</figcaption>
 </figure>
 
