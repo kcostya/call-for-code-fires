@@ -61,7 +61,7 @@ Our outputs are continuous numbers, but to decide the best model for the demo we
 Fires are rare compared to areas without fires. This lead to a dataset, where most of the fire counts are zeros, and only 2-3 percent of the fire data is non zero. And the large proportion of the fiery cells contains only 1-2 fires, which is close to zero. To help the model to learn the difference between fiery and non-fiery cells, we tried to separate the fire and non-fire cases by replacing the non-fiery zero values by negative numbers. -1 for non-fiery cells gave better results than zero, but to find better separation needs further research.
 
 <figure align="center">
-  <img src="/images/scores.JPG" width="250" height="250">
+  <img src="/images/scores.JPG" width="400" height="300">
   <figcaption>Precision, recall, f1-score with different fire existence separation thresholds.</figcaption>
 </figure>
 
@@ -79,7 +79,16 @@ With our second main approach, we managed to build a model which was able to cat
 
 For our training, validation and test data, we considered an area which includes the states of California and Nevada, as there have been numerous large wildfires in CA in recent years which have caused injury and significant property damage. However, our data comes from near-real-time global NASA datasets, and our solution could be applied globally with only the model needing to be trained on the regional data. 
 
-Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019). The temporal and spatial resolution varies between datasets, but we have aggregated and resampled the time series data to be on 12hour frequency and each cell in our spatial grid is roughly 50km<sup>2</sup>.   
+Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019). The temporal and spatial resolution varies between datasets, but we have aggregated and resampled the time series data to be on 12hour frequency and each cell in our spatial grid is roughly 50km<sup>2</sup>.
+
+For predicting fire we collected and processed a large amount of data from different open sources including NASA satellite observation data. As part of the project, we have created a semi-automated pipeline that can collect and pre-process data for virtually any territory of the world.
+Or main data types are satellite observation of fires, weather reanalysis, land cover, and geographical features, and satellite observations about the features of the vegetation like leaf area index or MIR (middle infrared region). We transformed this dataset to the same spatial grid, and time steps. For building the first models we used the default resolution of the MERRA (Modern-Era Retrospective analysis for Research and Applications) database, which was produced on a 0.5° × 0.66° grid. Our dataset covers nine years of data from 2010 to 2018. 
+
+<figure align="center">
+  <img src="/images/data_examples.JPG" width="400" height="300">
+  <figcaption>Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire</figcaption>
+</figure>
+
 
 ##### Data Sources
 
