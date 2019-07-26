@@ -1,5 +1,6 @@
 # Call for Code 2019: Fire Forecasting
 
+
 ### Problem Description
 
 In the US, over the past decade, there have been an average of 66 thousand fires annually, with Federal fire suppression costs totaling over \$18 billion for the decade <cite>[(NIFC, 2019)][1]</cite>. Over 69 million acres have been burned, sometimes resulting in property damage, injury, and even death. According to the National Fire Protection Association’s Fire Loss report for the US in 2017 alone, property damage was estimated at \$23 billion, including \$10 billion in losses from wildfires in Northern California <cite>[(NFPA, 2018)][2]</cite>.<br>
@@ -8,15 +9,18 @@ In the US, over the past decade, there have been an average of 66 thousand fires
   <img src="/images/all_fires.JPG" align="center" width="500" height="500">
 </figure>
 
+
 ### Forecasting Fires - Why is it important?
 
 Fire forecasts and danger ratings “...provide quantification of risk elements that are critical for daily decisions regarding firefighter resource placement, staffing levels, appropriate suppression response, and strategic decisions at local, regional, and national levels.” <cite>[(NWCG, 2019)][3]</cite>. With advance notice, agencies will be able to prepare and mobilize more quickly; fighting fires in their early stages might lead to a reduction in fire spread and therefore, damage. Most importantly, this could prevent injury and death. In 2017 there were over 14 thousand injuries and over 3 thousand deaths due to fire <cite>[(USFA, n.d.)][4]</cite>. 
+
 
 ### Previous Work
 
 One of the current fire forecasting products in use in the US is the 7-Day Significant Fire Potential Product. Per the Geographic Area Coordination Centers <cite>[(GACC, n.d.)][5]</cite>:
 
 > The product is based on a statistical model which uses fuel moisture inputs from the NFDRS (WIMS) and various gridded weather inputs from weather models. This data is processed through a series of equations that yield forecasts of Fuel Dryness Level (DL) as well as probabilities (some objective and some subjective) of certain critical weather conditions for each of the next 7 days. When appropriate combinations of DL and weather triggers are expected, a “**High Risk Day**” is designated on the Chart to warn of a significantly higher than normal chance for a “Large Fire”.
+
 
 ### Solution
 
@@ -49,7 +53,28 @@ The second main approach doesn’t forecast the existing fires but shows the are
 <figure align="center">
   <img src="/images/simpla_data_flow.JPG">
 </figure>
-*Simplified dataflow of our models in Approach I.*
+_Simplified dataflow of our models in Approach I._
+
+
+### Architecture
+
+[ details of final architecture here ]
+
+
+### Metric
+
+For our metric, we used [F1 Score](https://en.wikipedia.org/wiki/F1_score), [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). For our baselines, we used scores from the following naive predictions:
+
+1. No fires [Fscore: 0.493, Precision: 0.485, Recall: 0.500]
+
+2. The average of the previous 2 days fire count [Fscore: 0.632, Precision: 0.611, Recall: 0.686]
+
+3. The average of the previous 24 hours fire count [Fscore: 0.737, Precision: 0.729, Recall: 0.770]
+
+4. The average of the previous 12 hours fire count [Fscore: 0.755, Precision: 0.767, Recall: 0.764]
+
+
+### Results
 
 During experimenting, we tried out different architectures of mixed convolutional LSTM, encoder-decoder and convolutional layers. So far the best results for Approach I. we got from the below simple 2 steps convolutional LSTM and one step convolutional network.
 
@@ -64,7 +89,7 @@ Fires are rare compared to areas without fires. This lead to a dataset, where mo
 <figure align="center">
   <img src="/images/scores.JPG" width="400" height="300">
 </figure>
-*Precision, recall, f1-score with different fire existence separation thresholds.*
+_Precision, recall, f1-score with different fire existence separation thresholds._
 
 Because of the large proportion of non-fiery cells, we anticipated that the model output is biased. So instead of considering a cell fiery when the model forecasts a number greater than zero, we experimented with other numbers. To find the best threshold for fire/non-fire separation we checked the meaningful thresholds, and choose the one with best f1-score from validation data. This method didn’t significantly alter the scores of test data, but with larger datasets later can be useful.
 
@@ -73,7 +98,11 @@ With our second main approach, we managed to build a model which was able to cat
 <figure align="center">
   <img src="/images/seasonality.JPG" align="center">
 </figure>
-*The boxes show the calculated fire potential of a day in every month in 2018.*
+_The boxes show the calculated fire potential of a day in every month in 2018._
+
+![loss gif](images/loss.gif)
+
+![predicted and actual gif](images/pred_actual.gif)
 
 
 ### Data
@@ -91,7 +120,7 @@ Or main data types are satellite observation of fires, weather reanalysis, land 
 <figure align="center">
   <img src="/images/data_examples.JPG">
 </figure>
-*Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire.*
+_Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire._
 
 ##### Data Sources
 
@@ -100,36 +129,6 @@ Or main data types are satellite observation of fires, weather reanalysis, land 
 3. [Land Cover CCI Climate Research Data Package](http://maps.elie.ucl.ac.be/CCI/viewer/download.php) _Global [land cover] maps at 300m spatial resolution._ Updated annually.
 4. [Gridded Population of the World V.4](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11). _Population Density. Estimates of human population density (# of persons/square km) based on counts consistent with national consensuses and population registers_. 30 arc-second resolution (~1km)
 5. [MODIS Vegetation Indices](https://modis.gsfc.nasa.gov/data/dataprod/mod13.php) _MODIS vegetation indices, produced on 16-day intervals at 1km spatial resolution, provide consistent spatial and temporal comparisons of vegetation canopy greenness, a composite property of leaf area, chlorophyll and canopy structure._ In some cases, [vegetation indices have be used to estimate fuel moisture content](https://www.sciencedirect.com/science/article/abs/pii/S0034425704001531), one of the most important factors in fire ignition and spread.
-
-
-### Architecture
-
-[ details of final architecture here ]
-
-### Metric
-
-For our metric, we used [F1 Score](https://en.wikipedia.org/wiki/F1_score), [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). For our baselines, we used scores from the following naive predictions:
-
-1. No fires [Fscore: 0.493, Precision: 0.485, Recall: 0.500]
-
-2. The average of the previous 2 days fire count [Fscore: 0.632, Precision: 0.611, Recall: 0.686]
-
-3. The average of the previous 24 hours fire count [Fscore: 0.737, Precision: 0.729, Recall: 0.770]
-
-4. The average of the previous 12 hours fire count [Fscore: 0.755, Precision: 0.767, Recall: 0.764]
-
-   
-
-### Results
-
-[ details of results here ]
-
-
-
-![loss gif](images/loss.gif)
-
-![predicted and actual gif](images/pred_actual.gif)
-
 
 
 ### Future Work
@@ -146,11 +145,13 @@ In the future, we would like to use higher resolution data and new surface featu
   <img src="/images/highres_plan.JPG">
 </figure>
 
+
 ### Credits and Thanks
 
 First, we'd like to thank IBM for access to [ list IBM products/services used here ] and for the opportunity to compete in this challenge. It has been an inspiring and exciting experience for us. We would love to see our work applied to help mitigate damage and injury. 
 
 We'd also like to thank NASA and those involved in funding the collection of, and curating the datasets we have used. This would not be possible without you, so thank you! 
+
 
 ### License
 
