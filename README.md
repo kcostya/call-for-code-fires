@@ -48,7 +48,7 @@ The second main approach doesn’t forecast the existing fires but shows the are
 
 <figure align="center">
   <img src="/images/simpla_data_flow.JPG">
-  <figcaption font-style="italic">Simplified dataflow of our models in Approach I.</figcaption>
+  <figcaption>*Simplified dataflow of our models in Approach I.*</figcaption>
 </figure>
 
 During experimenting, we tried out different architectures of mixed convolutional LSTM, encoder-decoder and convolutional layers. So far the best results for Approach I. we got from the below simple 2 steps convolutional LSTM and one step convolutional network.
@@ -63,7 +63,7 @@ Fires are rare compared to areas without fires. This lead to a dataset, where mo
 
 <figure align="center">
   <img src="/images/scores.JPG" width="400" height="300">
-  <figcaption>Precision, recall, f1-score with different fire existence separation thresholds.</figcaption>
+  <figcaption>*Precision, recall, f1-score with different fire existence separation thresholds.*</figcaption>
 </figure>
 
 Because of the large proportion of non-fiery cells, we anticipated that the model output is biased. So instead of considering a cell fiery when the model forecasts a number greater than zero, we experimented with other numbers. To find the best threshold for fire/non-fire separation we checked the meaningful thresholds, and choose the one with best f1-score from validation data. This method didn’t significantly alter the scores of test data, but with larger datasets later can be useful.
@@ -72,7 +72,7 @@ With our second main approach, we managed to build a model which was able to cat
 
 <figure align="center">
   <img src="/images/seasonality.JPG" align="center">
-  <figcaption>The boxes show the calculated fire potential of a day in every month in 2018.</figcaption>
+  <figcaption>*The boxes show the calculated fire potential of a day in every month in 2018.*</figcaption>
 </figure>
 
 
@@ -90,7 +90,7 @@ Or main data types are satellite observation of fires, weather reanalysis, land 
 
 <figure align="center">
   <img src="/images/data_examples.JPG">
-  <figcaption>Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire</figcaption>
+  <figcaption>*Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire.*</figcaption>
 </figure>
 
 
