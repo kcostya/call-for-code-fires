@@ -90,6 +90,7 @@ Fires are rare compared to areas without fires. This lead to a dataset, where mo
   <img src="/images/scores.JPG" width="400" height="300">
 </figure>
 _Precision, recall, f1-score with different fire existence separation thresholds._
+<br>
 
 Because of the large proportion of non-fiery cells, we anticipated that the model output is biased. So instead of considering a cell fiery when the model forecasts a number greater than zero, we experimented with other numbers. To find the best threshold for fire/non-fire separation we checked the meaningful thresholds, and choose the one with best f1-score from validation data. This method didn’t significantly alter the scores of test data, but with larger datasets later can be useful.
 
@@ -99,6 +100,7 @@ With our second main approach, we managed to build a model which was able to cat
   <img src="/images/seasonality.JPG" align="center">
 </figure>
 _The boxes show the calculated fire potential of a day in every month in 2018._
+<br>
 
 ![loss gif](images/loss.gif)
 
@@ -121,6 +123,7 @@ Or main data types are satellite observation of fires, weather reanalysis, land 
   <img src="/images/data_examples.JPG">
 </figure>
 _Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire._
+<br>
 
 ##### Data Sources
 
