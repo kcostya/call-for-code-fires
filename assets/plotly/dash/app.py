@@ -8,8 +8,8 @@ from flask import Flask
 import numpy as np
 import dash_table
 import urllib
+import urllib.parse
 import glob
-
 
 ## Whether or not to use nrt data
 use_nrt = False
@@ -95,6 +95,8 @@ data = dict(
             text = list(df_fp['fire count'].astype(str)),
             ),
 layout = dict(
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
               title = "CA Fires: Fire-driven Forecast", 
               width = 600, 
               height = 600, 
@@ -286,8 +288,13 @@ fig2 =  go.Figure(data=[go.Table(
                                            ),
                               cells=dict(values=[df_fp.timestamp, df_fp.timestep, df_fp.lat, df_fp.lon, df_fp['fire count']],
                                          fill_color='antiquewhite',
-                                         align='left'))
-                  ])
+                                         align='left'),)
+                  ],
+                  layout=dict(            
+                              paper_bgcolor='rgba(0,0,0,0)',
+                              plot_bgcolor='rgba(0,0,0,0)',
+                              )
+                  )
 
 ### DASH layout ####
 
@@ -299,98 +306,105 @@ server = app.server
 
 filter_options = ['(-0.001, 1.0]', '(1.0, 5.0]', '(5.0, 10.0]', '(10.0, 100.0]']
 
-app.layout = html.Div([
-    html.Div([
-
-#### Div 1 for dropdown menu
+app.layout = html.Div([ 
         html.Div([
-            dcc.RadioItems(
-                id='forecast-type',
-                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Weather-driven forecast', 'Previous day - actual']],
-                value='Fire-driven forecast',
-                labelStyle={'display': 'inline-block',},
-                inputStyle= {'margin-right':'8px' ,'margin-top':'10px','margin-left': '18px'}
-            )
-             ],
-        style={'width': '48%','display': 'inline-block',}),
 
-    ]),
+        #### Div 1 for dropdown menu
+                html.Div([
+                    dcc.RadioItems(
+                        id='forecast-type',
+                        options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Weather-driven forecast', 'Previous day - actual']],
+                        value='Fire-driven forecast',
+                        labelStyle={'display': 'inline-block',},
+                        inputStyle= {'margin-right':'8px' ,'margin-top':'10px','margin-left': '18px'},
 
-##### Div 2 - for graph and slider
-    html.Div([
-              ## fire forecast figure
-              dcc.Graph(id='firecount-graphic'),
-              ## slider for the timesteps
-              dcc.Slider(
-                id='timestep--slider',
-                min=df_fp['timestep'].min(),
-                max=df_fp['timestep'].max(),
-                value=df_fp['timestep'].min(),
-                marks={str(timestep): str(timestep) for timestep in df_fp['timestep'].unique()},
-                step=None,
-                  ),
-            ], style={'width': '50%', 'position':'fixed', 'left':'70%', 'top':'45%', 'margin-top':-300, 'margin-left':-300}),
+                    )
+                     ],
+                style={'width': '48%','display': 'inline-block',}),
 
-  html.Div([
-          dash_table.DataTable(
-                              id='table-filtering-be',
-                              columns=[
-                                  {"name": i, "id": i} for i in df_fp.columns 
-                              ],
-                              filter_action='custom',
-                              filter_query='',
-                              style_as_list_view=True,
-                              style_cell_conditional=[
-                                                        {
-                                                            'if': {'column_id': 'timestamp'},'width': '8%',
-                                                            
-                                                        },                              
-                                                        {
-                                                            'if': {'column_id': 'fire count'},'width': '12%',
-                                                            
-                                                        }, 
-       
-                                                         {
-                                                            'if': {'column_id': 'timestep'},'width': '10%', 
-                                                            
-                                                        }, 
-                                                         {
-                                                            'if': {'column_id': 'lat'},'width': '5%',
-                                                            
-                                                        },
-                                                         {
-                                                            'if': {'column_id': 'lon'},'width': '5%',
-                                                        },
-                                                      ],
-                              style_data_conditional=[
-                                                      {
-                                                      'if': {'row_index': 'odd'},
-                                                      'backgroundColor': 'rgb(248, 248, 248)'
-                                                      }
-                                                      ],
-                              style_header={
-                                          'backgroundColor': 'rgb(230, 230, 230)',
-                                          'fontWeight': 'bold',
-                                              },
-            
-                              style_table={
-                                          'maxHeight': '450px',
-                                          'maxWidth': '500px',
-                                          'overflowY': 'scroll',
-                                          },
-                              fixed_rows={ 'headers': True, 'data': 0 },
+            ]),
 
-                          ),
-                  html.A(
-                          'Download Data',
-                          id='download-link',
-                          download="rawdata.csv",
-                          href="",
-                          target="_blank"
-                      )
-  ], style={'width': '50%', 'position':'fixed', 'left':'30%', 'top':'17%', 'margin-bottom':-300, 'margin-left':-325})
+      ##### Div 2 - for graph and slider
+          html.Div([
+                    ## fire forecast figure
+                    dcc.Graph(id='firecount-graphic'),
+                    ## slider for the timesteps
+                    dcc.Slider(
+                      id='timestep--slider',
+                      min=df_fp['timestep'].min(),
+                      max=df_fp['timestep'].max(),
+                      value=df_fp['timestep'].min(),
+                      marks={str(timestep): str(timestep) for timestep in df_fp['timestep'].unique()},
+                      step=None,
+                        ),
+                  ], style={'width': '50%', 'position':'fixed', 'left':'70%', 'top':'45%', 'margin-top':-300, 'margin-left':-300}),
 
-])
+        html.Div([
+                dash_table.DataTable(
+                                    id='table-filtering-be',
+                                    columns=[
+                                        {"name": i, "id": i} for i in df_fp.columns 
+                                    ],
+                                    filter_action='custom',
+                                    filter_query='',
+                                    style_as_list_view=True,
+                                    style_cell_conditional=[
+                                                              {
+                                                                  'if': {'column_id': 'timestamp'},'width': '8%',
+                                                                  
+                                                              },                              
+                                                              {
+                                                                  'if': {'column_id': 'fire count'},'width': '12%',
+                                                                  
+                                                              }, 
+             
+                                                               {
+                                                                  'if': {'column_id': 'timestep'},'width': '10%', 
+                                                                  
+                                                              }, 
+                                                               {
+                                                                  'if': {'column_id': 'lat'},'width': '5%',
+                                                                  
+                                                              },
+                                                               {
+                                                                  'if': {'column_id': 'lon'},'width': '5%',
+                                                              },
+                                                            ],
+                                    style_data_conditional=[
+                                                            {
+                                                            'if': {'row_index': 'odd'},
+                                                            'backgroundColor': 'rgb(248, 248, 248)'
+                                                            }
+                                                            ],
+                                    style_header={
+                                                'backgroundColor': 'rgb(230, 230, 230)',
+                                                'fontWeight': 'bold',
+                                                    },
+                  
+                                    style_table={
+                                                'maxHeight': '450px',
+                                                'maxWidth': '500px',
+                                                'overflowY': 'scroll',
+                                                },
+                                    fixed_rows={ 'headers': True, 'data': 0 },
+
+                                ),
+                        html.A(
+                                'Download Data',
+                                id='download-link',
+                                download="rawdata.csv",
+                                href="",
+                                target="_blank"
+                            )
+    ], style={'width': '50%', 'position':'fixed', 'left':'30%', 'top':'17%', 'margin-bottom':-300, 'margin-left':-325})
+
+], #style={
+            # 'background-image': 'url(/assets/high_res_earth.jpeg)',
+            # 'background-repeat': 'no-repeat',
+            # 'background-position': 'center',
+            # 'background-size': '100%'
+            # }
+  )
 
 operators = [['ge ', '>='],
              ['le ', '<='],
@@ -469,7 +483,7 @@ def update_fig(timestep_value, forecast_type, filter_query):
   dff = update_table(dff, filter_query)
 
   csv_string = dff.to_csv(index=False, encoding='utf-8')
-  csv_string = "data:text/csv;charset=utf-8," + urllib.quote(csv_string)
+  csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
 
   ## Update the data within the figure
   def update_data(df, fig):
@@ -502,7 +516,7 @@ def update_fig(timestep_value, forecast_type, filter_query):
 
 if __name__ == '__main__':
   # local 
-  # app.run_server(debug=True)
+  app.run_server(debug=True)
   #public
-  app.run_server(host='0.0.0.0', debug=True, port=8080)
+  # app.run_server(host='0.0.0.0', debug=True, port=8080)
 
