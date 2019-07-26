@@ -26,8 +26,9 @@ The other goal of the project was to develop a system of near-real-time (NRT) mo
 
 During development, we explored different input data combinations, Deep Learning models architectures, and different time-frames.
 
-We developed models to estimate the fire frequency in the grid cells. We can consider this a kind of fire density of the grid, and we assumed that this fire count is proportional with the fire danger and fire probability in the grid cell. 
-The grid cell dimension we used for the demo is approximately 50 km, and we didn’t try to forecast the horizontal spread of fires. But the fire spread modeling based on the data can also be explored as the further work on the project.
+We developed models to estimate fire presence and spread in the grid cells, or areas. We trained the models on observed fire counts, and we consider our outputs as the fire density of the grid, and we assumed that this output value is proportional with the fire danger and fire probability in the grid cells. 
+
+The grid cell dimension we used for the demo is approximately 50 km, and we didn’t try to forecast the horizontal tranlocation of fires bacause our demo scale is too large fore that. But the fire spread modeling based on the data can also be explored as the further work on the project.
 
 Main approaches:
 
@@ -81,8 +82,11 @@ For our training, validation and test data, we considered an area which includes
 
 Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019). The temporal and spatial resolution varies between datasets, but we have aggregated and resampled the time series data to be on 12hour frequency and each cell in our spatial grid is roughly 50km<sup>2</sup>.
 
+OR
+```
 For predicting fire we collected and processed a large amount of data from different open sources including NASA satellite observation data. As part of the project, we have created a semi-automated pipeline that can collect and pre-process data for virtually any territory of the world.
-Or main data types are satellite observation of fires, weather reanalysis, land cover, and geographical features, and satellite observations about the features of the vegetation like leaf area index or MIR (middle infrared region). We transformed this dataset to the same spatial grid, and time steps. For building the first models we used the default resolution of the MERRA (Modern-Era Retrospective analysis for Research and Applications) database, which was produced on a 0.5° × 0.66° grid. Our dataset covers nine years of data from 2010 to 2018. 
+Or main data types are satellite observation of fires, weather reanalysis, land cover, and geographical features, and satellite observations about the features of the vegetation like leaf area index or MIR (middle infrared region). We transformed this dataset to the same spatial grid, and time steps. For building the first models we used the default resolution of the MERRA (Modern-Era Retrospective analysis for Research and Applications) database, which was produced on a 0.5° × 0.66° grid. Our dataset covers nine years of data from 2010 to 2018.
+```
 
 <figure align="center">
   <img src="/images/data_examples.JPG">
