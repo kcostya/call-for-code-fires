@@ -3,4 +3,4 @@ applications:
   random-route: true
   memory: 256M
   docker:
-     image: kcostya/seer
+     image: rlsaxby/seer
