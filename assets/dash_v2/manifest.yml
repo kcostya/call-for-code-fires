@@ -3,4 +3,4 @@ applications:
   random-route: true
   memory: 256M
   docker:
-     image: rlsaxby/seer
+     image: rlsaxby/dash_v2
