@@ -16,6 +16,8 @@ from plotly import graph_objs as go
 from plotly.graph_objs import *
 from datetime import datetime as dt
 import pandas as pd
+import matplotlib.colors
+from utils import * 
 
 
 app = dash.Dash(
@@ -28,20 +30,8 @@ server = app.server
 mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNqdnBvNDMyaTAxYzkzeW5ubWdpZ2VjbmMifQ.TXcBE-xg9BFdV2ocecc_7g"
 
 
-list_of_locations = {
-    "Los Angeles": {"lat": 34.052, "lon": -118.244},
-    "San Diego": {"lat": 32.716 ,"lon": -117.165},
-    "San Jose": {"lat": 37.339 ,"lon": -121.895},
-    "San Francisco": {"lat": 37.775 ,"lon": -122.419},
-    "Fresno": {"lat": 36.748 ,"lon": -119.772},
-    "Sacramento": {"lat": 38.582 ,"lon": -121.494},
-    "Long Beach": {"lat": 33.767 ,"lon": -118.189},
-    "Oakland": {"lat": 37.804 ,"lon": -122.271},
-    "Bakersfield": {"lat": 35.373 ,"lon": -119.019},
-    "Anaheim": {"lat": 33.835 ,"lon": -117.915},
-}
 
-# Initialize data frame
+### Initialize data frames
 df_fp = pd.read_csv(
     "data/sample_df_start_2016-04-21_12_00_00.csv", 
     dtype=object,
@@ -73,6 +63,9 @@ marker_symbol = 'circle'#'square'
 colorbar_max_val = 8
 opacity = 0.5
 max_rows = 10
+colorscale = 'solar'#.reversed(name=None)#cmocean_to_plotly(cmocean.cm.solar, colorbar_max_val, reverse=True)
+
+
 # Layout of Dash App
 app.layout = html.Div(
     
@@ -319,24 +312,8 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type):
                                     color=np.arange(colorbar_max_val+1),
                                     opacity=opacity,
                                     size=marker_size,
-                                    colorscale=[
-                                        [0, "#F4EC15"],
-                                        [0.04167, "#DAF017"],
-                                        [0.0833, "#BBEC19"],
-                                        [0.125, "#9DE81B"],
-                                        [0.1667, "#80E41D"],
-                                        [0.2083, "#66E01F"],
-                                        [0.25, "#4CDC20"],
-                                        [0.292, "#34D822"],
-                                        [0.333, "#24D249"],
-                                        [0.375, "#25D042"],
-                                        [0.4167, "#26CC58"],
-                                        [0.4583, "#28C86D"],
-                                        [0.50, "#29C481"],
-                                        [0.54167, "#2AC093"],
-                                        [0.5833, "#2BBCA4"],
-                                        [1.0, "#613099"],
-                                    ],
+                                    colorscale=colorscale,
+                                    reversescale=True,
                                     colorbar=dict(
                                         title="Fire Count",
                                         x=0.93,
@@ -431,5 +408,5 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type):
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    app.run_server(host='0.0.0.0', debug=True, port=8080)
+    app.run_server(debug=True)
+    # app.run_server(host='0.0.0.0', debug=True, port=8080)
