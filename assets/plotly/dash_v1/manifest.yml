@@ -1,0 +1,6 @@
+applications:
+- name: deeplearning-seer
+  random-route: true
+  memory: 256M
+  docker:
+     image: kcostya/seer

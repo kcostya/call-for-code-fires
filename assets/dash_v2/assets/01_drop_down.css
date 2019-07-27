@@ -1,0 +1,28 @@
+/*.Select-control, .Select-menu-outer, .Select-multi-value-wrapper, .select-up, .is-open, .Select-control {
+  background-color: #1E1E1E;
+  color: white;
+}
+
+#wrapper .Select--multi .Select-value {
+  background-color: #1E1E1E;
+  background: #1E1E1E;
+  color: #fff;
+}*/
+/*
+table{
+	table-layout: fixed;
+	height:auto;
+    border-collapse: collapse;
+    margin: 20px 10px;*/
+    /*width:65%;
+    position:fixed;
+    top: 53%;
+    margin-left: 0%;
+    padding-right: 10px;
+}
+*/
+
+#datatable div.Select-control {
+ 	height: '500px';
+	overflow-y: 'scroll';
+}

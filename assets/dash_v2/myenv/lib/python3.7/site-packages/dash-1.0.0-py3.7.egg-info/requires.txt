@@ -1,0 +1,33 @@
+Flask>=0.12
+flask-compress
+plotly
+dash_renderer==1.0.0
+dash-core-components==1.0.0
+dash-html-components==1.0.0
+dash-table==4.0.0
+pytest
+pytest-sugar
+pytest-mock
+lxml
+selenium
+percy
+requests[security]
+beautifulsoup4
+waitress
+
+[ci]
+dash_flow_example==0.0.5
+dash-dangerously-set-inner-html
+six
+mock
+flake8
+
+[ci:python_version < "3.7"]
+pylint==1.9.4
+
+[ci:python_version == "2.7"]
+virtualenv
+
+[ci:python_version == "3.7"]
+pylint==2.3.1
+astroid==2.2.5
