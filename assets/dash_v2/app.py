@@ -124,7 +124,7 @@ app.layout = html.Div(
                                             # Dropdown for locations on map
                                             dcc.Dropdown(
                                                 id="map-type-dropdown",
-                                                options=[{'label': "Map: {}".format(i.capitalize()), 'value': i} for i in ['light', 'dark', 'outdoors', 'satellite', 'satellite-streets']],
+                                                options=[{'label': "Map: {}".format(i.capitalize()), 'value': i} for i in [ 'dark', 'outdoors', 'satellite-streets']],
                                                 placeholder="Select a map type",
                                                 value='dark',
                                             )
@@ -132,6 +132,12 @@ app.layout = html.Div(
                                     ),
                                  ],
                             ),
+                            dcc.Checklist(
+                                id="checklist",
+                                options=[{'label': i, 'value': i} for i in ["Surface Temperature", "Max Windspeed", "MIR\N{ASTERISK} ", "Precipitation"]],
+                                value=['Precipitation',],
+                                labelStyle={'display': 'inline-block'},
+                            ) ,
                         html.P(id="total-fires"),
                         html.P(id="forecast-type"),
                         html.P(id="timestep-value"),
@@ -163,7 +169,7 @@ app.layout = html.Div(
                                 dash_table.DataTable(
                                             id='table-filtering-be',
                                             columns=[
-                                                {"name": i, "id": i} for i in df_fp.columns 
+                                                {"name": i, "id": i} for i in df_fp.columns if i != 'Timestep' 
                                             ],
                                             filter_action='custom',
                                             filter_query='',
@@ -242,10 +248,11 @@ def split_filter_part(filter_part):
         Input("timestep--dropdown", "value"),
         Input("forecast-type-dropdown", "value"),
         dash.dependencies.Input('table-filtering-be', "filter_query"),
-        Input("map-type-dropdown", "value")
+        Input("map-type-dropdown", "value"),
+        Input("checklist", "value")
     ],
 )
-def update_graph(timestep_value, forecast_type, filter_query, map_type):
+def update_graph(timestep_value, forecast_type, filter_query, map_type, checklist):
 
     
 
