@@ -46,7 +46,7 @@ The other model is weather forecast driven. From the last state of fires, it pre
 Approach II:
 The second main approach doesn’t forecast the existing fires but shows the area with the largest potential for new fires. (fig: fire potential map based on the weather prior). This model isn’t a simple statistical model of the training period, but it also considers the 30 days weather prior to the estimated day. This can be used with historical weather data, numerical forecast, or combined. This model gives back a map, where we can see the relative potential of fires. Later we plan to use the outputs of this model as an input feature of the above-described models.
 
- ![flow](images/simpla_data_flow.JPG)
+ ![flow](images/simpla_data_flow.JPG)<br>
 _Simplified dataflow of our models in Approach I._
 
 
@@ -80,7 +80,7 @@ Our outputs are continuous numbers, but to decide the best model for the demo we
 
 Fires are rare compared to areas without fires. This lead to a dataset, where most of the fire counts are zeros, and only 2-3 percent of the fire data is non zero. And the large proportion of the fiery cells contains only 1-2 fires, which is close to zero. To help the model to learn the difference between fiery and non-fiery cells, we tried to separate the fire and non-fire cases by replacing the non-fiery zero values by negative numbers. -1 for non-fiery cells gave better results than zero, but to find better separation needs further research.
 
-![scores](images/scores.JPG)
+![scores](images/scores.JPG)<br>
 _Precision, recall, f1-score with different fire existence separation thresholds._
 
 
@@ -89,11 +89,11 @@ Because of the large proportion of non-fiery cells, we anticipated that the mode
 With our second main approach, we managed to build a model which was able to catch the seasonality of the fires but considered the effect of the past 30 days weather. We hope, that inputting this results back to our models which forecasts actual fires we can get better results. With this approach, the model didn’t know the existing fires, so it shows the cells with the best conditions for possible fires based on the prior 30 days data. To retrieve the information from these predictions the earlier described thresholding method was necessary because all of the predicted values were below zero. We had to find the best separator of non-fiery and fiery cells and based on that threshold we got the maps below.
 
 
-![seasons](images/seasonality.JPG)
+![seasons](images/seasonality.JPG)<br>
 _The boxes show the calculated fire potential of a day in every month in 2018._
 
-![one year fires](images/2018fireS.gif)
-_2018 Fire potential, fire and weather. In august the model forecasts that the north-eastern region will be mor fiery._
+![one year fires](images/2018fireS.gif)<br>
+_2018 Fire potential, fire and weather. In august the model forecasts well the north-eastern region will be more fiery._
 
 ![loss gif](images/loss.gif)
 
@@ -112,7 +112,7 @@ For predicting fire we collected and processed a large amount of data from diffe
 Or main data types are satellite observation of fires, weather reanalysis, land cover, and geographical features, and satellite observations about the features of the vegetation like leaf area index or MIR (middle infrared region). We transformed this dataset to the same spatial grid, and time steps. For building the first models we used the default resolution of the MERRA (Modern-Era Retrospective analysis for Research and Applications) database, which was produced on a 0.5° × 0.66° grid. Our dataset covers nine years of data from 2010 to 2018.
 ```
 
- <img src="/images/data_examples.JPG">
+ <img src="/images/data_examples.JPG"><br>
 _Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire._
 
 ##### Data Sources
