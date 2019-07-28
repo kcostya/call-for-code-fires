@@ -95,10 +95,6 @@ _The boxes show the calculated fire potential of a day in every month in 2018._
 ![one year fires](images/2018fireS.gif)<br>
 _2018 Fire potential, fire and weather. In august the model forecasts well the north-eastern region will be more fiery._
 
-![loss gif](images/loss.gif)
-
-![predicted and actual gif](images/pred_actual.gif)
-
 
 ### Data
 
