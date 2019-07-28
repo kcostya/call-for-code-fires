@@ -18,6 +18,9 @@ from datetime import datetime as dt
 import pandas as pd
 import matplotlib.colors
 from utils import * 
+from sklearn.preprocessing import MinMaxScaler
+import plotly.express as px
+
 
 
 app = dash.Dash(
@@ -29,29 +32,6 @@ server = app.server
 # Plotly mapbox public token
 mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNqdnBvNDMyaTAxYzkzeW5ubWdpZ2VjbmMifQ.TXcBE-xg9BFdV2ocecc_7g"
 
-
-
-### Initialize data frames
-df_fp = pd.read_csv(
-    "data/sample_df_start_2016-04-21_12_00_00.csv", 
-    dtype=object,
-)
-df_fp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
-
-df_wp = pd.read_csv(
-    "data/sample_start_2016-04-21_12h_step_12h_pred_noinputfire_bestseparator_min079.csv",
-    dtype=object,
-)
-df_wp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
-
-df_h = pd.read_csv(
-    "data/historical_df_start_2016-04-20_12_00_00.csv",
-    dtype=object,
-)
-df_h.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
-
-# df =df_fp#= pd.concat([df1, df2], axis=0)
-
 # Parameters
 
 time_window = 48
@@ -61,9 +41,44 @@ time_step = 12
 marker_size = 18
 marker_symbol = 'circle'#'square'
 colorbar_max_val = 8
-opacity = 0.5
+weather_opacity = 0.3
+fire_opacity = 0.8
 max_rows = 10
 colorscale = 'solar'#.reversed(name=None)#cmocean_to_plotly(cmocean.cm.solar, colorbar_max_val, reverse=True)
+
+
+### Initialize data frames
+df_fp = pd.read_csv(
+    "data/sample_df_start_2017-01-04.csv", 
+    dtype=object,
+)
+df_fp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
+
+df_wp = pd.read_csv(
+    "data/sample_start_2017-01-04_12h_step_12h_pred_noinputfire_bestseparator_min079.csv",
+    dtype=object,
+)
+df_wp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
+
+df_comb = pd.read_csv(
+    "data/combined_f_valid_prediction_2017-01-04.csv",
+    dtype=object,
+)
+df_comb.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
+
+
+df_h = pd.read_csv(
+    "data/historical_df_start_2017-01-04.csv",
+    dtype=object,
+)
+df_h.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
+
+df_w = pd.read_csv('data/weather_start_2017-01-04.csv')
+df_w.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count", "TSURF":"Surface Temperature", "PRECTOT":"Precipitation", "SPEEDMAX":"Max Windspeed",}, inplace=True)
+## scale values to be on same range as colorscale
+scaler = MinMaxScaler()
+num_cols = [x for x in df_w.columns if x not in ['Timestamp', 'Timestep', 'Lat', 'Lon', 'Fire Count']]
+df_w[num_cols] = scaler.fit_transform(df_w[num_cols]) * colorbar_max_val ## scaling factor for colorbar
 
 
 # Layout of Dash App
@@ -106,7 +121,7 @@ app.layout = html.Div(
                                             # Dropdown for locations on map
                                             dcc.Dropdown(
                                                 id="forecast-type-dropdown",
-                                                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Weather-driven forecast', 'Previous day - actual']],
+                                                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Combined Fire and Weather-driven forecast', 'Previous day - actual']],
                                                 placeholder="Select a report/forecast",
                                             )
                                         ],
@@ -132,14 +147,14 @@ app.layout = html.Div(
                                     ),
                                  ],
                             ),
-                            dcc.Checklist(
-                                id="checklist",
-                                options=[{'label': i, 'value': i} for i in ["Surface Temperature", "Max Windspeed", "MIR\N{ASTERISK} ", "Precipitation"]],
-                                value=['Precipitation',],
+                            dcc.RadioItems(
+                                id="weather-checklist",
+                                options=[{'label': i, 'value': i} for i in ["Surface Temperature", "Max Windspeed", "MIR\N{ASTERISK}", "Precipitation"]],
                                 labelStyle={'display': 'inline-block'},
+                                inputStyle= {'margin-right':'8px' ,'margin-top':'10px','margin-left': '18px'},
                             ) ,
-                        html.P(id="total-fires"),
-                        html.P(id="forecast-type"),
+                        html.P(id="total-fires", style={'margin-top':'20px'}),
+                        html.P(id="forecast-type",),
                         html.P(id="timestep-value"),
         
                         html.A(
@@ -249,10 +264,11 @@ def split_filter_part(filter_part):
         Input("forecast-type-dropdown", "value"),
         dash.dependencies.Input('table-filtering-be', "filter_query"),
         Input("map-type-dropdown", "value"),
-        Input("checklist", "value")
+        Input("weather-checklist", "value")
     ],
 )
-def update_graph(timestep_value, forecast_type, filter_query, map_type, checklist):
+
+def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_checklist):
 
     
 
@@ -260,12 +276,14 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, checklis
         dff = df_wp
     elif forecast_type == 'Previous day - actual':
         dff = df_h
+    elif forecast_type == 'Combined weather and fire-driven forecast':
+        dff = df_comb
     else:
         forecast_type = "Fire-driven forecast"
         dff = df_fp
 
-    dff = dff[(dff['Timestep'] == timestep_value)]
-
+    dff = dff[(dff['Timestep'] == timestep_value)] 
+    dff_w = df_w[df_w['Timestep'] == int(timestep_value)] if timestep_value else -1
     def update_table(df, filter):
       filtering_expressions = filter.split(' && ')
       for filter_part in filtering_expressions:
@@ -295,18 +313,30 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, checklis
     lonInitial = -116.59118404059357
     bearing = 0
      ## Update the data within the figure
-    def update_data(df, forecast_type, map_type):
+    def update_data(dff, dff_w, forecast_type, map_type, selected_weather):
         # for table
-        df.sort_values(by='Fire Count', inplace=True, ascending=False)
+        dff.sort_values(by='Fire Count', inplace=True, ascending=False)
         # access the first (and only trace) of the data, then reassign the properties
         # fig['data'][0]['name'] = timestep_value
-        lat  = list(df['Lat']) if len(df['Lat']) > 0 else [0]
-        lon = list(df['Lon'])if len(df['Lon']) > 0 else [0]
-        text = list(df['Fire Count'].astype(str))
+        lat  = list(dff['Lat']) if len(dff['Lat']) > 0 else [0]
+        lon = list(dff['Lon'])if len(dff['Lon']) > 0 else [0]
+        text = list(dff['Fire Count'].astype(str))
+
+        if selected_weather:
+            # weather plot
+            w_lat = list(dff_w['Lat']) 
+            w_lon = list(dff_w['Lon'])
+            if selected_weather == 'MIR\N{ASTERISK}' :
+                    selected_weather = 'MIR'
+            # dff_w[num_cols] = scaler.inverse_transform(dff_w[num_cols])/colorbar_max_val        
+            weather_text = [selected_weather + ": "] + np.round(dff_w[selected_weather], decimals=2).astype(str)
+        else:
+            w_lat, w_lon = [0], [0]
+            weather_text = [""]
 
         fig = go.Figure(
                         data=[
-                            # Data for all rides based on date and time
+                            # Data for fire report / forecast
                             Scattermapbox(
                                 lat=lat,
                                 lon=lon,
@@ -316,20 +346,41 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, checklis
                                 marker=dict(
                                     symbol = marker_symbol,
                                     showscale=True,
-                                    color=np.arange(colorbar_max_val+1),
-                                    opacity=opacity,
+                                    color= dff['Fire Count'].astype(np.float) ,
+                                    opacity=fire_opacity,
                                     size=marker_size,
                                     colorscale=colorscale,
                                     reversescale=True,
+                                    cmin=0.,
+                                    cmax=colorbar_max_val,
                                     colorbar=dict(
-                                        title="Fire Count",
+                                        # title="Fire Count",
                                         x=0.93,
                                         xpad=0,
-                                        nticks=12,
+                                        nticks=colorbar_max_val,
+                                        tickvals = [0, 4, 8],
+                                        ticktext = ["Low", "Medium", "High"],
                                         tickfont=dict(color="#d8d8d8"),
                                         titlefont=dict(color="#d8d8d8"),
                                         thicknessmode="pixels",
                                     ),
+                                ),
+                            ),
+                      # Data for weather
+                            Scattermapbox(
+                                lat=w_lat,
+                                lon=w_lon,
+                                mode="markers",
+                                hoverinfo="lat+lon+text",
+                                text=weather_text,
+                                marker=dict(
+                                    symbol = marker_symbol,
+                                    color=(dff_w[selected_weather].astype(np.float))  if selected_weather else [],
+                                    opacity=weather_opacity,
+                                    size=marker_size,
+                                    reversescale=True,
+                                    colorscale=colorscale,
+
                                 ),
                             ),
                         ],
@@ -402,6 +453,8 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, checklis
     if not timestep_value:
         timestep_value = ""
         fire_count = "Select the hour"
+        forecast_type = ""
+        weather_checklist = None
     else:
         if forecast_type == "Previous day - actual":
             timestep_value = "{} hours ago".format(timestep_value)
@@ -411,7 +464,7 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, checklis
             fire_count = "Total Forecasted Fires: {}".format(fire_count)
 
 
-    return update_data(dff, forecast_type, map_type), dff.to_dict('records'), csv_string, fire_count, forecast_type, timestep_value
+    return update_data(dff,dff_w, forecast_type, map_type, weather_checklist), dff.to_dict('records'), csv_string, fire_count, forecast_type, timestep_value
 
 
 if __name__ == "__main__":
