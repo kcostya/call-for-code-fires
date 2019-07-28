@@ -41,44 +41,44 @@ time_step = 12
 marker_size = 18
 marker_symbol = 'circle'#'square'
 colorbar_max_val = 8
-weather_opacity = 0.3
+# weather_opacity = 0.3
 fire_opacity = 0.9
 max_rows = 10
 colorscale = 'solar'#.reversed(name=None)#cmocean_to_plotly(cmocean.cm.solar, colorbar_max_val, reverse=True)
 
 
 ### Initialize data frames
+# fire driven forecast
 df_fp = pd.read_csv(
-    "data/sample_df_start_2017-01-04.csv", 
+    "data/sample_df_start_2017-11-13.csv", 
     dtype=object,
 )
+# binarize predictions
+df_fp['fire count'] = np.where(df_fp['fire count'].astype(np.float) > 0., (1.), 0.)
 df_fp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
 
-df_wp = pd.read_csv(
-    "data/sample_start_2017-01-04_12h_step_12h_pred_noinputfire_bestseparator_min079.csv",
-    dtype=object,
-)
-df_wp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
-
+# combined weather and fire forecast
 df_comb = pd.read_csv(
-    "data/sample_start_2017-01-04_12h_step_12h_pred_comb_weather_fire_forecast.csv",
+    "data/sample_start_2017-11-13_12h_step_12h_pred_comb_weather_fire_forecast.csv",
     dtype=object,
 )
 df_comb.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
 
-
+# hist data
 df_h = pd.read_csv(
-    "data/historical_df_start_2017-01-04.csv",
+    "data/historical_df_start_2017-11-13.csv",
     dtype=object,
 )
 df_h.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
 
-df_w = pd.read_csv('data/weather_start_2017-01-04.csv')
-df_w.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count", "TSURF":"Surface Temperature", "PRECTOT":"Precipitation", "SPEEDMAX":"Max Windspeed",}, inplace=True)
-## scale values to be on same range as colorscale
-scaler = MinMaxScaler()
-num_cols = [x for x in df_w.columns if x not in ['Timestamp', 'Timestep', 'Lat', 'Lon', 'Fire Count']]
-df_w[num_cols] = scaler.fit_transform(df_w[num_cols]) * colorbar_max_val ## scaling factor for colorbar
+## historic and nrt weather
+df_w_nrt = pd.read_csv('data/nrt_weather.csv')
+df_w_nrt.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count", "T2M":"2m Temperature", "PRECTOT":"Precipitation", "SPEEDMAX":"Max Windspeed",}, inplace=True)
+
+df_w_h = pd.read_csv('data/hist_weather.csv')
+df_w_h.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep", "lat": "Lat", "lon": "Lon", "fire count": "Fire Count", "T2M":"2m Temperature", "PRECTOT":"Precipitation", "SPEEDMAX":"Max Windspeed",}, inplace=True)
+# units for weather
+units = {"2m Temperature": " (K)", "Precipitation": " (kg/m2/s)", "Max Windspeed": " (m/s)", "MIR\N{ASTERISK}":"", "Fires Only":""}
 
 
 # Layout of Dash App
@@ -93,7 +93,7 @@ app.layout = html.Div(
                     className="four columns div-user-controls",
                     children=[
                         html.Img(
-                            className="logo", src=app.get_asset_url("Call_for_Code_logo.png")
+                            className="logo", src=app.get_asset_url("seer_logo.png"), height=200,
                         ),
                         html.H2("Deep Learning: SEER"),
                         html.P("CA Firecast and Near-real-time Data App"),
@@ -121,7 +121,7 @@ app.layout = html.Div(
                                             # Dropdown for locations on map
                                             dcc.Dropdown(
                                                 id="forecast-type-dropdown",
-                                                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Combined weather and fire-driven forecast', 'Previous day - actual']],
+                                                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Previous day - actual']],
                                                 placeholder="Select a report/forecast",
                                             )
                                         ],
@@ -129,7 +129,7 @@ app.layout = html.Div(
                                  ],
                             ),
 
-                                                # Change to side-by-side for mobile layout
+                            # Change to side-by-side for mobile layout
                             html.Div(
                                 className="row",
                                 children=[
@@ -149,23 +149,28 @@ app.layout = html.Div(
                             ),
                             dcc.RadioItems(
                                 id="weather-checklist",
-                                options=[{'label': i, 'value': i} for i in ["Surface Temperature", "Max Windspeed", "MIR\N{ASTERISK}", "Precipitation"]],
+                                options=[{'label': i + units[i], 'value': i} for i in ["Fires Only","2m Temperature", "Max Windspeed", "MIR\N{ASTERISK}", "Precipitation"]],
                                 labelStyle={'display': 'inline-block'},
+                                value='Fires Only',
                                 inputStyle= {'margin-right':'8px' ,'margin-top':'10px','margin-left': '18px'},
                             ) ,
                         html.P(id="total-fires", style={'margin-top':'20px'}),
                         html.P(id="forecast-type",),
                         html.P(id="timestep-value"),
-        
                         html.A(
                                 'Download Dataframe as CSV',
                                 id='download-link',
                                 download="rawdata.csv",
                                 href="",
                                 target="_blank",
-                            )
-                            
-                        
+                            ),
+                        html.Div(
+                            className="text-padding",
+                            children=[
+                                "\N{ASTERISK}MIR, or mid-infrared is considered a good indicator of fuel-moisture content.",
+                            ],
+                        ),
+
                     ],
                 ),
 
@@ -175,10 +180,12 @@ app.layout = html.Div(
                     className="eight columns div-for-charts bg-grey",
                     children=[
                         dcc.Graph(id="firecount-graphic"),
-                        # html.Div(
-                        #     className="text-padding",
-                        #     children=["Filter by any column."],
-                        #     ),
+                        dcc.Slider(
+                                    id='opacity-slider',
+                                    min=0,
+                                    max=10,
+                                    value=3,
+                                    ) ,
                     html.Div( className='table',
                         children=[
                                 dash_table.DataTable(
@@ -209,7 +216,7 @@ app.layout = html.Div(
                                     ),
                                 ],  
                             ),
-                    ], 
+                    ],  
                 ),
             ],
         )
@@ -264,26 +271,37 @@ def split_filter_part(filter_part):
         Input("forecast-type-dropdown", "value"),
         dash.dependencies.Input('table-filtering-be', "filter_query"),
         Input("map-type-dropdown", "value"),
-        Input("weather-checklist", "value")
+        Input("weather-checklist", "value"),
+        Input("opacity-slider", "value"),
     ],
 )
 
-def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_checklist):
+def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_checklist, weather_opacity):
 
     
 
     if forecast_type == 'Weather-driven forecast':
         dff = df_wp
+        dff_w = df_w_nrt # nrt weather
     elif forecast_type == 'Previous day - actual':
         dff = df_h
+        dff_w = df_w_h # historic weather
     elif forecast_type == 'Combined weather and fire-driven forecast':
         dff = df_comb
+        dff_w = df_w_nrt # nrt weather
     else:
         forecast_type = "Fire-driven forecast"
         dff = df_fp
+        dff_w = df_w_nrt # nrt weather
 
+    # no timestep chosen so we don't want to display any data
     dff = dff[(dff['Timestep'] == timestep_value)] 
-    dff_w = df_w[df_w['Timestep'] == int(timestep_value)] if timestep_value else -1
+    if timestep_value:
+        dff_w = dff_w[dff_w['Timestep'] == int(timestep_value)]
+    else:
+        dff_w =  []
+
+
     def update_table(df, filter):
       filtering_expressions = filter.split(' && ')
       for filter_part in filtering_expressions:
@@ -291,7 +309,7 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
 
           if operator in ('eq', 'ne', 'lt', 'le', 'gt', 'ge'):
               # these operators match pandas series operator method names
-              df = df.loc[getattr(df[col_name], operator)(filter_value)]
+              df = df.loc[getattr(df[col_name].astype(np.float), operator)(filter_value)]
           elif operator == 'contains':
               df = df.loc[dff[col_name].str.contains(filter_value)]
           elif operator == 'datestartswith':
@@ -301,7 +319,7 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
       return df
 
 
-    # update datble
+    # update datatable
     dff = update_table(dff, filter_query)
     fire_count = dff['Fire Count'].apply(lambda x: np.float(x)).sum()
     csv_string = dff.to_csv(index=False, encoding='utf-8')
@@ -313,7 +331,7 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
     lonInitial = -116.59118404059357
     bearing = 0
      ## Update the data within the figure
-    def update_data(dff, dff_w, forecast_type, map_type, selected_weather):
+    def update_data(dff, dff_w, forecast_type, map_type, selected_weather, weather_opacity):
         # for table
         dff.sort_values(by='Fire Count', inplace=True, ascending=False)
         # access the first (and only trace) of the data, then reassign the properties
@@ -322,14 +340,13 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
         lon = list(dff['Lon'])if len(dff['Lon']) > 0 else [0]
         text = list(dff['Fire Count'].astype(str))
 
-        if selected_weather:
+        if selected_weather != 'Fires Only' and len(dff_w) > 1:
             # weather plot
             w_lat = list(dff_w['Lat']) 
             w_lon = list(dff_w['Lon'])
             if selected_weather == 'MIR\N{ASTERISK}' :
                     selected_weather = 'MIR'
-            # dff_w[num_cols] = scaler.inverse_transform(dff_w[num_cols])/colorbar_max_val        
-            weather_text = [selected_weather + ": "] + np.round(dff_w[selected_weather], decimals=2).astype(str)
+            weather_text = [selected_weather + ": "] + np.round(dff_w[selected_weather], decimals=3).astype(str)
         else:
             w_lat, w_lon = [0], [0]
             weather_text = [""]
@@ -375,8 +392,8 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
                                 text=weather_text,
                                 marker=dict(
                                     symbol = marker_symbol,
-                                    color=(dff_w[selected_weather].astype(np.float))  if selected_weather else [],
-                                    opacity=weather_opacity,
+                                    color=(dff_w[selected_weather].astype(np.float))  if len(w_lat) > 1 else [0],
+                                    opacity=weather_opacity/10,
                                     size=marker_size,
                                     reversescale=True,
                                     colorscale=colorscale,
@@ -464,9 +481,9 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
             fire_count = "Total Forecasted Fires: {}".format(fire_count)
 
 
-    return update_data(dff,dff_w, forecast_type, map_type, weather_checklist), dff.to_dict('records'), csv_string, fire_count, forecast_type, timestep_value
+    return update_data(dff,dff_w, forecast_type, map_type, weather_checklist, weather_opacity), dff.to_dict('records'), csv_string, fire_count, forecast_type, timestep_value
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    app.run_server(host='0.0.0.0', debug=True, port=8080)
+    app.run_server(debug=True)
+    # app.run_server(host='0.0.0.0', debug=True, port=8080)
