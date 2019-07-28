@@ -42,7 +42,7 @@ marker_size = 18
 marker_symbol = 'circle'#'square'
 colorbar_max_val = 8
 weather_opacity = 0.3
-fire_opacity = 0.8
+fire_opacity = 0.9
 max_rows = 10
 colorscale = 'solar'#.reversed(name=None)#cmocean_to_plotly(cmocean.cm.solar, colorbar_max_val, reverse=True)
 
@@ -61,7 +61,7 @@ df_wp = pd.read_csv(
 df_wp.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
 
 df_comb = pd.read_csv(
-    "data/combined_f_valid_prediction_2017-01-04.csv",
+    "data/sample_start_2017-01-04_12h_step_12h_pred_comb_weather_fire_forecast.csv",
     dtype=object,
 )
 df_comb.rename(columns={"timestamp": "Timestamp", "timestep":"Timestep","lat": "Lat", "lon": "Lon", "fire count": "Fire Count"}, inplace=True)
@@ -121,7 +121,7 @@ app.layout = html.Div(
                                             # Dropdown for locations on map
                                             dcc.Dropdown(
                                                 id="forecast-type-dropdown",
-                                                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Combined Fire and Weather-driven forecast', 'Previous day - actual']],
+                                                options=[{'label': i, 'value': i} for i in ['Fire-driven forecast', 'Combined weather and fire-driven forecast', 'Previous day - actual']],
                                                 placeholder="Select a report/forecast",
                                             )
                                         ],
@@ -468,5 +468,5 @@ def update_graph(timestep_value, forecast_type, filter_query, map_type, weather_
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
-    # app.run_server(host='0.0.0.0', debug=True, port=8080)
+    # app.run_server(debug=True)
+    app.run_server(host='0.0.0.0', debug=True, port=8080)
