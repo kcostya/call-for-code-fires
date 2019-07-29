@@ -45,7 +45,7 @@ This folder has the core notebooks with code needed to recreate the results.
     │   ├── ../start_2010-02-01_00h_step_12h_pred_noinputfire_shifted_to_zero_scaled_up_to_8.csv
     │   ├── ../start_2010-02-01_00h_step_12h_pred_noinputfire_th_min08853_colormax_min06308.csv
     
- **3.0-kk-prediction-semitemporal_generator.ipynb**
+ **3.1-kk-prediction-semitemporal_generator.ipynb**
  
     ├── Inputs
     │   ├── ../basegrid_12h.csv     <- output from 1.1-iv-make_dataset-dataset_builder.ipynb
