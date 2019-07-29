@@ -2,6 +2,12 @@
 ## Deep Learning: SEER
 System of near-real-time (NRT) monitoring and predicting forest and grass fires based on satellite observations and powered by Deep Learning models.
 
+### Demo Video
+[Demo Video (SHORT)](https://www.youtube.com/watch?v=kPaeT3ceBAc&feature=youtu.be)
+
+### Web App
+
+[Deep Learning: SEER](http://deeplearning-seer-fluent-badger.eu-gb.mybluemix.net/)
 
 ### Problem Description
 
