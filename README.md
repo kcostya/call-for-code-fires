@@ -6,7 +6,6 @@ System of near-real-time (NRT) monitoring and predicting forest and grass fires 
 [Demo Video (SHORT)](https://www.youtube.com/watch?v=kPaeT3ceBAc&feature=youtu.be)
 
 ### Web App
-
 [Deep Learning: SEER](http://deeplearning-seer-fluent-badger.eu-gb.mybluemix.net/)
 
 ### Problem Description
@@ -60,16 +59,7 @@ _Simplified dataflow of our models in Approach I._
 
 ### Metric
 
-For our metric, we used [F1 Score](https://en.wikipedia.org/wiki/F1_score), [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). For our baselines, we used scores from the following naive predictions:
-
-1. No fires [Fscore: 0.493, Precision: 0.485, Recall: 0.500]
-
-2. The average of the previous 2 days fire count [Fscore: 0.632, Precision: 0.611, Recall: 0.686]
-
-3. The average of the previous 24 hours fire count [Fscore: 0.737, Precision: 0.729, Recall: 0.770]
-
-4. The average of the previous 12 hours fire count [Fscore: 0.755, Precision: 0.767, Recall: 0.764]
-
+For our metric, we used [F1 Score](https://en.wikipedia.org/wiki/F1_score), [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). For our baselines, we used score of naive predictions of 12/24/48 hours average of previous period data.
 
 ### Results
 
@@ -96,6 +86,13 @@ _The boxes show the calculated fire potential of a day in every month in 2018._
 
 ![one year fires](images/2018fireS.gif)<br>
 _2018 Fire potential, fire and weather. In 2018 august the model forecasts well that the north-eastern region will be more fiery. The model was trained on 2010-2016 data._
+
+
+| **Score** | Avg  12h | Avg 24h | Avg 48h |  Our model<br>(ConvLSTM) |
+|:---------:|:--------:|:-------:|:-------:|:---------------------:|
+| Precision |   0.767  |  0.729  |  0.611  |       **0.756**       |
+| Recall    |   0.764  |  0.770  |  0.686  |       **0.800**       |
+| **F-1**   |   0.755  |  0.737  |  0.632  |       **0.777**       |
 
 
 ### Data
@@ -140,13 +137,15 @@ We'd also like to thank NASA and those involved in funding the collection of, an
 
 ### Authors
 
-*
+* Kostyantyn Kravchenko<br>
+https://github.com/kcostya
+https://www.linkedin.com/in/kkravchenko
 
 * Rachael Saxby<br>
 https://github.com/rsaxby<br>
 https://www.linkedin.com/in/rachaelsaxby/<br>
 
-Istvan Veber<br>
+* Istvan Veber<br>
 https://github.com/sinusgamma<br>
 https://www.linkedin.com/in/istvanveber/<br>
 
