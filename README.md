@@ -87,7 +87,7 @@ With our second main approach, we managed to build a model which was able to cat
 _The boxes show the calculated fire potential of a day in every month in 2018._
 
 ![one year fires](images/2018fireS.gif)<br>
-_2018 Fire potential, fire and weather. In august the model forecasts well the north-eastern region will be more fiery._
+_2018 Fire potential, fire and weather. In 2018 august the model forecasts well that the north-eastern region will be more fiery. The model was trained on 2010-2016 data._
 
 
 ### Data
