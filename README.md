@@ -76,16 +76,7 @@ Fires are rare compared to areas without fires. This lead to a dataset, where mo
 ![scores](images/scores.JPG)<br>
 _Precision, recall, f1-score with different fire existence separation thresholds._
 
-Because of the large proportion of non-fiery cells, we anticipated that the model output is biased. So instead of considering a cell fiery when the model forecasts a number greater than zero, we experimented with other numbers. To find the best threshold for fire/non-fire separation we checked the meaningful thresholds, and choose the one with best f1-score from validation data. This method didn’t significantly alter the scores of test data, but with larger datasets later can be useful.
-
-With our second main approach, we managed to build a model which was able to catch the seasonality of the fires but considered the effect of the past 30 days weather. We hope, that inputting this results back to our models which forecasts actual fires we can get better results. With this approach, the model didn’t know the existing fires, so it shows the cells with the best conditions for possible fires based on the prior 30 days data. To retrieve the information from these predictions the earlier described thresholding method was necessary because almost all of the predicted values were below zero. We had to find the best separator of non-fiery and fiery cells and based on that threshold we got the maps below.
-
-
-![seasons](images/seasonality.JPG)<br>
-_The boxes show the calculated fire potential of a day in every month in 2018._
-
-![one year fires](images/2018fireS.gif)<br>
-_2018 Fire potential, fire and weather. In 2018 august the model forecasts well that the north-eastern region will be more fiery. The model was trained on 2010-2016 data._
+Because of the large proportion of non-fiery cells, we anticipated that the model output is biased. So instead of considering a cell fiery when the model forecasts a number greater than zero, we experimented with other numbers. To find the best threshold for fire/non-fire separation we checked the meaningful thresholds, and choose the one with best f1-score from validation data. This method didn’t significantly alter the scores of test data, but with larger datasets later can be useful. With Approach I, we are forecasting the evolution of existing fires. We compared the performance of our best model to baseline models. The best baseline model (Avg 12h) forecasts, that the fire will be the same as the prior 12h average. We managed to build better performing model than that.
 
 #### Model scores compared to 12/24/48 hours average baseline
 
@@ -94,6 +85,15 @@ _2018 Fire potential, fire and weather. In 2018 august the model forecasts well 
 | Precision |   0.767  |  0.729  |  0.611  |       **0.756**       |
 | Recall    |   0.764  |  0.770  |  0.686  |       **0.800**       |
 | **F-1**   |   0.755  |  0.737  |  0.632  |       **0.777**       |
+
+With Approach II, we managed to build a model which was able to catch the seasonality of the fires but considered the effect of the past 30 days weather. We hope, that inputting this results back to our models which forecasts actual fires we can get better results. With this approach, the model didn’t know the existing fires, so it shows the cells with the best conditions for possible fires based on the prior 30 days data. To retrieve the information from these predictions the earlier described thresholding method was necessary because almost all of the predicted values were below zero. We had to find the best separator of non-fiery and fiery cells and based on that threshold we got the maps below.
+
+
+![seasons](images/seasonality.JPG)<br>
+_The boxes show the calculated fire potential of a day in every month in 2018._
+
+![one year fires](images/2018fireS.gif)<br>
+_2018 Fire potential, fire and weather. In 2018 august the model forecasts well that the north-eastern region will be more fiery. The model was trained on 2010-2016 data._
 
 
 ### Data
