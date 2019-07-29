@@ -26,11 +26,11 @@ We seek to improve upon these models by removing some of the subjectivity and di
 
 The other goal of the project was to develop a system of near-real-time (NRT) monitoring of forest and grass fires based on satellite observations.
 
-During development, we explored different input data combinations, Deep Learning models architectures, and different time-frames.
+During development, we explored different input data combinations, Deep Learning model architectures, and different time-frames.
 
 We developed models to estimate fire presence and spread in the grid cells, or areas. We trained the models on observed fire counts, and we consider our outputs as the fire density of the grid, and we assumed that this output value is proportional with the fire danger and fire probability in the grid cells. 
 
-The grid cell dimension we used for the demo is approximately 50 km, and we didn’t try to forecast the horizontal tranlocation of fires bacause our demo scale is too large fore that. But the fire spread modeling based on the data can also be explored as the further work on the project.
+The grid cell dimension we used for the demo is approximately 50 km, and we didn’t try to forecast the horizontal translocation of fires because our demo scale is too large for that. But the horizontal fire spread modeling based on the data can also be explored as the further work on the project.
 
 Main approaches:
 
@@ -44,7 +44,7 @@ For this approach, we built two types of models. The first one is based on the e
 The other model is weather forecast driven. From the last state of fires, it predicts future fire development. This model can be sensitive to wrong weather forecasts.
 
 Approach II:
-The second main approach doesn’t forecast the existing fires but shows the area with the largest potential for new fires. (fig: fire potential map based on the weather prior). This model isn’t a simple statistical model of the training period, but it also considers the 30 days weather prior to the estimated day. This can be used with historical weather data, numerical forecast, or combined. This model gives back a map, where we can see the relative potential of fires. Later we plan to use the outputs of this model as an input feature of the above-described models.
+The second main approach doesn’t forecast the existing fires but shows the area with the largest potential for new fires. (fig: fire potential map based on the weather prior). This model isn’t a simple statistical model of the training period, but it also considers the 30 days weather prior to the estimated day. This can be used with historical weather data, numerical forecast, or combined. This model gives back a map, where we can see the relative potential of fires. We used the outputs of this model as an input feature of the above-described models.
 
  ![flow](images/simpla_data_flow.JPG)<br>
 _Simplified dataflow of our models in Approach I._
@@ -78,15 +78,14 @@ During experimenting, we tried out different architectures of mixed convolutiona
 
 Our outputs are continuous numbers, but to decide the best model for the demo we used precision, recall, and f1-score, and our scores were based on fire existence. Our main ranking score was f1-score.
 
-Fires are rare compared to areas without fires. This lead to a dataset, where most of the fire counts are zeros, and only 2-3 percent of the fire data is non zero. And the large proportion of the fiery cells contains only 1-2 fires, which is close to zero. To help the model to learn the difference between fiery and non-fiery cells, we tried to separate the fire and non-fire cases by replacing the non-fiery zero values by negative numbers. -1 for non-fiery cells gave better results than zero, but to find better separation needs further research.
+Fires are rare compared to areas without fires. This lead to a dataset, where most of the fire counts are zeros, and only 2-3 percent of the fire data is non zero. Large proportion of the fiery cells contains only 1-2 fires, which is close to zero. To help the model to learn the difference between fiery and non-fiery cells, we tried to separate the fire and non-fire cases by replacing the non-fiery zero values by negative numbers. -1 for non-fiery cells gave better results than zero, but to find better separation needs further research.
 
 ![scores](images/scores.JPG)<br>
 _Precision, recall, f1-score with different fire existence separation thresholds._
 
-
 Because of the large proportion of non-fiery cells, we anticipated that the model output is biased. So instead of considering a cell fiery when the model forecasts a number greater than zero, we experimented with other numbers. To find the best threshold for fire/non-fire separation we checked the meaningful thresholds, and choose the one with best f1-score from validation data. This method didn’t significantly alter the scores of test data, but with larger datasets later can be useful.
 
-With our second main approach, we managed to build a model which was able to catch the seasonality of the fires but considered the effect of the past 30 days weather. We hope, that inputting this results back to our models which forecasts actual fires we can get better results. With this approach, the model didn’t know the existing fires, so it shows the cells with the best conditions for possible fires based on the prior 30 days data. To retrieve the information from these predictions the earlier described thresholding method was necessary because all of the predicted values were below zero. We had to find the best separator of non-fiery and fiery cells and based on that threshold we got the maps below.
+With our second main approach, we managed to build a model which was able to catch the seasonality of the fires but considered the effect of the past 30 days weather. We hope, that inputting this results back to our models which forecasts actual fires we can get better results. With this approach, the model didn’t know the existing fires, so it shows the cells with the best conditions for possible fires based on the prior 30 days data. To retrieve the information from these predictions the earlier described thresholding method was necessary because almost all of the predicted values were below zero. We had to find the best separator of non-fiery and fiery cells and based on that threshold we got the maps below.
 
 
 ![seasons](images/seasonality.JPG)<br>
@@ -102,13 +101,7 @@ For our training, validation and test data, we considered an area which includes
 
 Our dataset consists of different NASA data collections, including active fire, weather, elevation, landcover, population, and vegetation data.  Our data spans 9 years (2010-2019). The temporal and spatial resolution varies between datasets, but we have aggregated and resampled the time series data to be on 12hour frequency and each cell in our spatial grid is roughly 50km<sup>2</sup>.
 
-OR
-```
-For predicting fire we collected and processed a large amount of data from different open sources including NASA satellite observation data. As part of the project, we have created a semi-automated pipeline that can collect and pre-process data for virtually any territory of the world.
-Or main data types are satellite observation of fires, weather reanalysis, land cover, and geographical features, and satellite observations about the features of the vegetation like leaf area index or MIR (middle infrared region). We transformed this dataset to the same spatial grid, and time steps. For building the first models we used the default resolution of the MERRA (Modern-Era Retrospective analysis for Research and Applications) database, which was produced on a 0.5° × 0.66° grid. Our dataset covers nine years of data from 2010 to 2018.
-```
-
- <img src="/images/data_examples.JPG"><br>
+![one year fires](images/data_examples.JPG)<br>
 _Some of our used datatypes on map: elevation, poplulation (grid and high-res), landcover types, fire._
 
 ##### Data Sources
@@ -131,6 +124,8 @@ We'd like to consult domain experts to further explore features which might impr
 In the future, we would like to use higher resolution data and new surface features to be able to forecast the direction and speed of fires. From our ~50 km resolution, we would like to go to some hundred meters as lots of satellite data enable us to build this high-resolution dataset. We couldn’t train the whole area at once in one model because of the size of the data, only a part of it. But this way our prediction model would be more independent of specific places, and more dependent on the features of the environment. To train this model we plan to divide the forecast region to overlapping smaller areas and train the model on them. This way the trained model could be used on existing fires to forecast the movement of that fires.
 
 ![highres](images/highres_plan.JPG)
+
+We want to improve the satellite-based fire observation. Our goal is to make a system, that is able to distinguish new fires from earlier existing fires. The problem is that the exact coordinate of the same fire can be different from observation to observation as the fire moves a bit, thick clouds can cover the area, or there can be small errors of measurement. Because of these factors, it is hard to tell visually from one observation to the other if the coordinate is a new fire, or only the earlier fires hot-point shifted a bit, or last time the fire wasn't visible because of the weather. To address this we want to introduce a filtering system. This is going to be a combination of a spatial and time distance filter. For example, we can set the minimum threshold for spatial distance, and the system will show a coordinate as new fire, only if it is further away from all earlier fires than the threshold. We can combine this with a minimum and maximum time threshold. This way if a fire wasn't visible for one or two observations because of the weather we can compare it to a last known location. Of course only up to the maximum time threshold. The thresholds will start with default values but will be changeable for more experienced users.
 
 
 ### Credits and Thanks
