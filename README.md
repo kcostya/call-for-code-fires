@@ -50,11 +50,6 @@ The second main approach doesn’t forecast the existing fires but shows the are
 _Simplified dataflow of our models in Approach I._
 
 
-### Architecture
-
-[ details of final architecture here ]
-
-
 ### Metric
 
 For our metric, we used [F1 Score](https://en.wikipedia.org/wiki/F1_score), [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). For our baselines, we used scores from the following naive predictions:
@@ -134,6 +129,16 @@ First, we'd like to thank IBM for access to [ list IBM products/services used he
 
 We'd also like to thank NASA and those involved in funding the collection of, and curating the datasets we have used. This would not be possible without you, so thank you! 
 
+
+### Authors
+
+*
+
+*
+
+Istvan Veber 
+https://github.com/sinusgamma
+https://www.linkedin.com/in/istvanveber/
 
 ### License
 
