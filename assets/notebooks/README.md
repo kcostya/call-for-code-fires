@@ -25,7 +25,7 @@ The following structure explains the inputs and outputs of each notebook.
  
     ├── Inputs
     │   ├── ../constants_basegrid_divider_1.csv       <- output from 1.0-iv-make_dataset-build_constants.ipynb
-    │   ├── ../temporal/fire_merra_VI_embs_3h_basegrid_divider_1.csv
+    │   ├── ../temporal/fire_merra_VI_embs_3h_basegrid_divider_1.csv        <- downloaded from MODIS and MERRA-2
     |
     ├── Outputs
     │   ├── ../basegrid_12h.csv
