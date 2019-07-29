@@ -8,9 +8,9 @@ The following structure explains the inputs and outputs of each notebook.
 **[1.0-iv-make_dataset-build_constants.ipynb](https://github.com/kcostya/call-for-code-fires/blob/master/assets/notebooks/1.0-iv-make_dataset-build_constants.ipynb)**
     
     ├── Inputs
-    │   ├── ../merra1/full_dataset3.csv'       <- Your comments go here!
-    │   ├── ../201015-ca-population-density/2015_population_density_CA.csv'
-    │   ├── ../land-cover/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-USER_REGION-v2.0.7.nc'
+    │   ├── ../merra1/full_dataset3.csv'       <- downloaded from MERRA-2 database
+    │   ├── ../201015-ca-population-density/2015_population_density_CA.csv'     <- downloaded from SEDAC Archive Center
+    │   ├── ../land-cover/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-USER_REGION-v2.0.7.nc'        <- downloaded from ESA
     |
     ├── Outputs
     │   ├── ../constants_basegrid_divider_1.csv
