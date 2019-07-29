@@ -1,4 +1,7 @@
-# Call for Code 2019: Fire Forecasting
+# Call for Code 2019
+## Deep Learning: SEER
+System of near-real-time (NRT) monitoring and predicting forest and grass fires based on satellite observations and powered by Deep Learning models. 
+------------------
 
 
 ### Problem Description
