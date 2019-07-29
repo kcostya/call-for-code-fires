@@ -3,9 +3,9 @@ Notebooks organization
 
 The project was initially developed and models trained at Kaggle platform to leverage the free GPU resources. 
 
-This folder has the core notebooks with code needed to recreate the results.
+This folder has the core slightly refactored notebooks with code needed to recreate the results. The links below lead to original notebooks stored at Kaggle (requires permissions).
 
-**1.0-iv-make_dataset-build_constants.ipynb**
+**[1.0-iv-make_dataset-build_constants.ipynb](https://www.kaggle.com/sinusgamma/ibm-fire-build-the-constants-csv)**
     
     ├── Inputs
     │   ├── ../merra1/full_dataset3.csv'       <- Your comments go here!
@@ -14,9 +14,11 @@ This folder has the core notebooks with code needed to recreate the results.
     |
     ├── Outputs
     │   ├── ../constants_basegrid_divider_1.csv
-    
+ 
+ [merra1](https://www.kaggle.com/rsaxby/merra1)
+ [land-cover](https://www.kaggle.com/sinusgamma/land-cover)
 
- **1.1-iv-make_dataset-dataset_builder.ipynb**
+ **[1.1-iv-make_dataset-dataset_builder.ipynb](https://www.kaggle.com/sinusgamma/ibm-fire-dataset-builder-3-6-hr)**
  
     ├── Inputs
     │   ├── ../constants_basegrid_divider_1.csv       <- output from 1.0-iv-make_dataset-build_constants.ipynb
@@ -26,8 +28,10 @@ This folder has the core notebooks with code needed to recreate the results.
     │   ├── ../basegrid_12h.csv
     │   ├── ../basegrid_24h.csv
     │   ├── ../basegrid_6h.csv
+ 
+ [temporal](https://www.kaggle.com/rsaxby/temporal)
     
- **2.0-iv-prediction-non_fire_prediction.ipynb**
+ **[2.0-iv-prediction-non_fire_prediction.ipynb](https://www.kaggle.com/sinusgamma/ibm-fire-no-fire-feature-best-map)**
  
     ├── Inputs
     │   ├── ../basegrid_12h.csv     <- output from 1.1-iv-make_dataset-dataset_builder.ipynb
@@ -35,7 +39,7 @@ This folder has the core notebooks with code needed to recreate the results.
     ├── Outputs
     │   ├── ../start_2010-02-01_00h_step_12h.pickle_commit5
     
- **3.0-iv-make_dataset-convert_to_pandas.ipynb**
+ **[3.0-iv-make_dataset-convert_to_pandas.ipynb](https://www.kaggle.com/sinusgamma/ibm-fire-non-fire-input-data-conversion-to-pandas)**
  
     ├── Inputs
     │   ├── ../basegrid_12h.csv     <- output from 1.1-iv-make_dataset-dataset_builder.ipynb
@@ -45,7 +49,7 @@ This folder has the core notebooks with code needed to recreate the results.
     │   ├── ../start_2010-02-01_00h_step_12h_pred_noinputfire_shifted_to_zero_scaled_up_to_8.csv
     │   ├── ../start_2010-02-01_00h_step_12h_pred_noinputfire_th_min08853_colormax_min06308.csv
     
- **3.1-kk-prediction-semitemporal_generator.ipynb**
+ **[3.1-kk-prediction-semitemporal_generator.ipynb](https://www.kaggle.com/kcostya/ibm-fire-new-semitemporal-generator)**
  
     ├── Inputs
     │   ├── ../basegrid_12h.csv     <- output from 1.1-iv-make_dataset-dataset_builder.ipynb
