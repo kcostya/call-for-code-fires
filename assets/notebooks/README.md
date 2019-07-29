@@ -16,7 +16,10 @@ This folder has the core slightly refactored notebooks with code needed to recre
     │   ├── ../constants_basegrid_divider_1.csv
  
  [merra1](https://www.kaggle.com/rsaxby/merra1)
+ 
  [land-cover](https://www.kaggle.com/sinusgamma/land-cover)
+ 
+ [201015-ca-population-density](https://www.kaggle.com/rsaxby/201015-ca-population-density)
 
  **[1.1-iv-make_dataset-dataset_builder.ipynb](https://www.kaggle.com/sinusgamma/ibm-fire-dataset-builder-3-6-hr)**
  
