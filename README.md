@@ -110,7 +110,7 @@ _Some of our used datatypes on map: elevation, poplulation (grid and high-res), 
 
 ### Future Work
 
-Due to the size of our dataset, and the limitations of the machines we were training on, we were unable to use a higher temporal and spatial resolution. We believe that with higher resolution, our model's predictive power would be greatly enhanced. Preliminary runs at a 3hr resolution show [ discuss specific scores here ] , which is a [ specific score ] improvement over the 12hr resolution. 
+Due to the size of our dataset, and the limitations of the machines we were training on, we were unable to use a higher temporal and spatial resolution. We believe that with higher resolution, our model's predictive power would be greatly enhanced.
 
 Access to larger machines would also allow us to produce a longer-range forecast. With our current architecture, our features include not only those from the current time-step, but also those from the previous _N_ time-steps, where _N_ is equal to the number of time-steps we wish to forecast. This is very expensive, and we were limited to forecasting only 2 days. Even with a 2 day forecast, we were able to achieve [ discuss specific scores here ] , which is a [ specific  ]% improvement over the baseline 2 day forecast of [Fscore: 0.632, Precision: 0.611, Recall: 0.686]. With an extended forecast, fire agencies could better prepare themselves and advise the community in times of increased fire danger. 
 
@@ -125,7 +125,7 @@ We want to improve the satellite-based fire observation. Our goal is to make a s
 
 ### Credits and Thanks
 
-First, we'd like to thank IBM for access to [ list IBM products/services used here ] and for the opportunity to compete in this challenge. It has been an inspiring and exciting experience for us. We would love to see our work applied to help mitigate damage and injury. 
+First, we'd like to thank IBM for hosting our application on the cloud, and for the opportunity to compete in this challenge. It has been an inspiring and exciting experience for us. We would love to see our work applied to help mitigate damage and injury. 
 
 We'd also like to thank NASA and those involved in funding the collection of, and curating the datasets we have used. This would not be possible without you, so thank you! 
 
