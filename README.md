@@ -136,9 +136,9 @@ We'd also like to thank NASA and those involved in funding the collection of, an
 
 *
 
-Istvan Veber 
-https://github.com/sinusgamma
-https://www.linkedin.com/in/istvanveber/
+Istvan Veber<br>
+https://github.com/sinusgamma<br>
+https://www.linkedin.com/in/istvanveber/<br>
 
 ### License
 
