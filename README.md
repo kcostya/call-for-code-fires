@@ -141,7 +141,8 @@ https://github.com/sinusgamma<br>
 https://www.linkedin.com/in/istvanveber/<br>
 
 ### License
-
+Apache License, Version 2.0
+https://www.apache.org/licenses/LICENSE-2.0
 
 
 [1]: https://www.nifc.gov/fireInfo/fireInfo_documents/SuppCosts.pdf
