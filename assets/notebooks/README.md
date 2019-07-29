@@ -1,9 +1,9 @@
-Notebooks organization
+Notebooks
 ------------
 
-The project was initially developed and models trained at Kaggle platform to leverage the free GPU resources. 
+This section contains raw unrefactored notebooks needed to recreate the results.
 
-This folder has the core slightly refactored notebooks with code needed to recreate the results. The links below lead to original notebooks stored at Kaggle (requires permissions).
+The following structure explains the inputs and outputs of each notebook.
 
 **[1.0-iv-make_dataset-build_constants.ipynb](https://github.com/kcostya/call-for-code-fires/blob/master/assets/notebooks/1.0-iv-make_dataset-build_constants.ipynb)**
     
