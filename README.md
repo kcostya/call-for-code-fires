@@ -112,7 +112,7 @@ _Some of our used datatypes on map: elevation, poplulation (grid and high-res), 
 
 Due to the size of our dataset, and the limitations of the machines we were training on, we were unable to use a higher temporal and spatial resolution. We believe that with higher resolution, our model's predictive power would be greatly enhanced.
 
-Access to larger machines would also allow us to produce a longer-range forecast. With our current architecture, our features include not only those from the current time-step, but also those from the previous _N_ time-steps, where _N_ is equal to the number of time-steps we wish to forecast. This is very expensive, and we were limited to forecasting only 2 days. Even with a 2 day forecast, we were able to achieve [ discuss specific scores here ] , which is a [ specific  ]% improvement over the baseline 2 day forecast of [Fscore: 0.632, Precision: 0.611, Recall: 0.686]. With an extended forecast, fire agencies could better prepare themselves and advise the community in times of increased fire danger. 
+Access to larger machines would also allow us to produce a longer-range forecast. With our current architecture, our features include not only those from the current time-step, but also those from the previous _N_ time-steps, where _N_ is equal to the number of time-steps we wish to forecast. This is very expensive, and we were limited to forecasting only 2 days. With an extended forecast, fire agencies could better prepare themselves and advise the community in times of increased fire danger. 
 
 We'd like to consult domain experts to further explore features which might improve our scores, such as using forecasted weather. Currently we're using historical weather data, and weather at the time of prediction to make our forecast. However, as weather is one of the major factors in fire ignition and spread, we believe that using forecasted weather for each time-step in our prediction would result in more accurate predictions, particularly when combined with a higher temporal and spatial resolution.
 
@@ -134,7 +134,9 @@ We'd also like to thank NASA and those involved in funding the collection of, an
 
 *
 
-*
+* Rachael Saxby<br>
+https://github.com/rsaxby<br>
+https://www.linkedin.com/in/rachaelsaxby/<br>
 
 Istvan Veber<br>
 https://github.com/sinusgamma<br>
